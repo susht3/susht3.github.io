@@ -53,7 +53,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="RL," />
 
 
 
@@ -69,12 +69,58 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="susht">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="本文翻译自David Silver的《Tutorial: Deep Reinforcement Learning》 这是一篇阅读笔记，如有写错，请联系susht3@foxmail.com，一起讨论。 ####本文结构 一. 前言 二. 深度学习简介 三. 强化学习简介 四. 基于value的强化学习 五. 基于policy的强化学习 六. 基于model的强化学习 一. 前言深度学习 vs 强化学">
+<meta name="keywords" content="RL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《Deep_RL_Tutorial》之入门强化学习">
+<meta property="og:url" content="http://yoursite.com/2017/09/23/Deep-RL-Tutorial/index.html">
 <meta property="og:site_name" content="susht">
+<meta property="og:description" content="本文翻译自David Silver的《Tutorial: Deep Reinforcement Learning》 这是一篇阅读笔记，如有写错，请联系susht3@foxmail.com，一起讨论。 ####本文结构 一. 前言 二. 深度学习简介 三. 强化学习简介 四. 基于value的强化学习 五. 基于policy的强化学习 六. 基于model的强化学习 一. 前言深度学习 vs 强化学">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/deep.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/back.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/linear.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/non-linear.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/loss.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/der.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/w.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/moutain.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/two.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/rnn.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/cnn.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/rl.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/agent.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/state.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/policy.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/value.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/update.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/bell.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/optim.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/bell2.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/model.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/dqn.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/q-learn.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/experience.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/target.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/atari.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/doubleQ.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/replay.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/duelling.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/policy2.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/object.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/gradient.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/critic.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/q.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/actor.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/critic2.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/lab.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/critic3.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/actor2.png?raw=true">
+<meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/sim.png?raw=true">
+<meta property="og:updated_time" content="2017-09-23T14:29:37.754Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="susht">
+<meta name="twitter:title" content="《Deep_RL_Tutorial》之入门强化学习">
+<meta name="twitter:description" content="本文翻译自David Silver的《Tutorial: Deep Reinforcement Learning》 这是一篇阅读笔记，如有写错，请联系susht3@foxmail.com，一起讨论。 ####本文结构 一. 前言 二. 深度学习简介 三. 强化学习简介 四. 基于value的强化学习 五. 基于policy的强化学习 六. 基于model的强化学习 一. 前言深度学习 vs 强化学">
+<meta name="twitter:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/deep.png?raw=true">
 
 
 
@@ -104,13 +150,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/09/23/Deep-RL-Tutorial/"/>
 
 
 
 
 
-  <title>susht</title>
+  <title>《Deep_RL_Tutorial》之入门强化学习 | susht</title>
   
 
 
@@ -129,8 +175,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -203,9 +248,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -235,9 +280,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/23/Deep-RL-Tutorial/" itemprop="url">《Deep_RL_Tutorial》之入门强化学习</a></h1>
+          <h1 class="post-title" itemprop="name headline">《Deep_RL_Tutorial》之入门强化学习</h1>
         
 
         <div class="post-meta">
@@ -287,9 +330,7 @@
       
 
       
-        
-          
-            <p>本文翻译自David Silver的《Tutorial: Deep Reinforcement Learning》</p>
+        <p>本文翻译自David Silver的《Tutorial: Deep Reinforcement Learning》</p>
 <p>这是一篇阅读笔记，如有写错，请联系susht3@foxmail.com，一起讨论。</p>
 <p>####本文结构</p>
 <p>一. 前言</p>
@@ -521,8 +562,6 @@
 
 <h2 id="六-基于model的强化学习"><a href="#六-基于model的强化学习" class="headerlink" title="六. 基于model的强化学习"></a>六. 基于model的强化学习</h2><p>未完待续 暂时写不下去了….回宿舍</p>
 
-          
-        
       
     </div>
     
@@ -537,142 +576,36 @@
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/23/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="susht">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="susht">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/23/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-23T18:20:06+08:00">
-                2017-09-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-
+            <a href="/tags/RL/" rel="tag"># RL</a>
           
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
       
 
       
       
-        <div class="post-eof"></div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/23/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
       
     </footer>
   </div>
@@ -682,10 +615,11 @@
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -693,6 +627,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -713,8 +651,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           
             <p class="site-author-name" itemprop="name">susht</p>
@@ -766,6 +713,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-前言"><span class="nav-number">1.</span> <span class="nav-text">一. 前言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#深度学习-vs-强化学习"><span class="nav-number">1.1.</span> <span class="nav-text">深度学习 vs 强化学习</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-深度学习简介"><span class="nav-number">2.</span> <span class="nav-text">二. 深度学习简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-深度表征"><span class="nav-number">2.1.</span> <span class="nav-text">1. 深度表征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-深度神经网络"><span class="nav-number">2.2.</span> <span class="nav-text">2. 深度神经网络</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-强化学习简介"><span class="nav-number">3.</span> <span class="nav-text">三. 强化学习简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-RL的地位"><span class="nav-number">3.1.</span> <span class="nav-text">1. RL的地位</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-基本概念"><span class="nav-number">3.2.</span> <span class="nav-text">2.  基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-实现强化学习的方法"><span class="nav-number">3.3.</span> <span class="nav-text">4. 实现强化学习的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#DeepMind-DRL例子"><span class="nav-number">3.3.1.</span> <span class="nav-text">DeepMind-DRL例子</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四-基于value的深度学习"><span class="nav-number">4.</span> <span class="nav-text">四. 基于value的深度学习</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#DQN玩Atari游戏"><span class="nav-number">4.0.1.</span> <span class="nav-text">DQN玩Atari游戏</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-确定优先级的经验回放"><span class="nav-number">4.0.2.</span> <span class="nav-text">5.确定优先级的经验回放</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#策略方式"><span class="nav-number">4.0.3.</span> <span class="nav-text">策略方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Policy-Gradients"><span class="nav-number">4.0.4.</span> <span class="nav-text">Policy Gradients</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Actor-网络"><span class="nav-number">4.0.5.</span> <span class="nav-text">Actor 网络</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Critic-网络"><span class="nav-number">4.0.6.</span> <span class="nav-text">Critic 网络</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#A3C用于Labyrinth游戏"><span class="nav-number">4.0.7.</span> <span class="nav-text">A3C用于Labyrinth游戏</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#经验回放"><span class="nav-number">4.0.8.</span> <span class="nav-text">经验回放</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Actor-网络-1"><span class="nav-number">4.0.9.</span> <span class="nav-text">Actor 网络</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DDPG用于Simulated-Physics"><span class="nav-number">4.0.10.</span> <span class="nav-text">DDPG用于Simulated Physics</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六-基于model的强化学习"><span class="nav-number">5.</span> <span class="nav-text">六. 基于model的强化学习</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
