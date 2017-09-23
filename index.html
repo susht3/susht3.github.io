@@ -289,9 +289,9 @@
       
         
           
-            <p>本文翻译自David Silver的《Tutorial: Deep Reinforcement Learning》</p>
-<p>这是一篇阅读笔记，如有写错，请联系susht3@foxmail.com，一起讨论。</p>
-<h4 id="本文结构"><a href="#本文结构" class="headerlink" title="本文结构"></a>本文结构</h4><p>一. 前言</p>
+            <p>本文翻译自David Silver的《Tutorial: Deep Reinforcement Learning》，这仅是一篇个人的阅读笔记，如有写错，请联系susht3@foxmail.com，一起讨论。</p>
+<p>本文结构分为以下几部分：</p>
+<p>一. 前言</p>
 <p>二. 深度学习简介</p>
 <p>三. 强化学习简介</p>
 <p>四. 基于value的强化学习</p>
@@ -302,31 +302,31 @@
 <p>深度强化学习结合DL+RL，RL定义目标，DL给出计算过程。</p>
 <h2 id="二-深度学习简介"><a href="#二-深度学习简介" class="headerlink" title="二. 深度学习简介"></a>二. 深度学习简介</h2><p>深度学习是用来实现机器学习的一种方法！深度神经网络用于理解深度表征。</p>
 <h3 id="1-深度表征"><a href="#1-深度表征" class="headerlink" title="1. 深度表征"></a>1. 深度表征</h3><p>深度表征由很多函数组成：</p>
-<div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/deep.png?raw=true" style="zoom:60%"><br></div>
+<div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/deep.png?raw=true" style="zoom:40%"><br></div>
 
 
 
 <p>通过后向传播来更新梯度：</p>
-<div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/back.png?raw=true" style="zoom:60%"><br></div>
+<div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/back.png?raw=true" style="zoom:50%"><br></div>
 
 
 <p>注意：网络过深会导致网络权重更新不稳定，会带来梯度爆炸或者梯度消失的问题，有时候需要进行梯度截断。梯度消失，层数越多，求导结果越小，所以越是靠前的网络层权重几乎不更新，只学习到接近最后输出层的几层网络。梯度爆炸，w比较大。还跟学习率有关。<br>梯度爆炸和梯度消失的本质原因：梯度反向传播中的连乘效应。</p>
 <h3 id="2-深度神经网络"><a href="#2-深度神经网络" class="headerlink" title="2. 深度神经网络"></a>2. 深度神经网络</h3><p>线性变换：</p>
-<div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/linear.png?raw=true" style="zoom:50%"><br></div>
+<div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/linear.png?raw=true" style="zoom:40%"><br></div>
 
 <p>非线性激活函数：</p>
-<div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/non-linear.png?raw=true" style="zoom:50%"><br></div>
+<div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/non-linear.png?raw=true" style="zoom:40%"><br></div>
 
 <p>loss函数：</p>
-<div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/loss.png?raw=true" style="zoom:50%"><br></div>
+<div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/loss.png?raw=true" style="zoom:40%"><br></div>
 
 <p>有多种loss函数，平方差，对数似然函数，交叉熵等等。</p>
 <h3 id="3-随机梯度下降法"><a href="#3-随机梯度下降法" class="headerlink" title="3. 随机梯度下降法"></a>3. 随机梯度下降法</h3><p>对loss求导：</p>
-<div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/der.png?raw=true" style="zoom:50%"><br></div>
+<div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/der.png?raw=true" style="zoom:40%"><br></div>
 
 
 <p>根据梯度下降的方向去调整w：</p>
-<div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/w.png?raw=true" style="zoom:50%"><br></div>    
+<div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/w.png?raw=true" style="zoom:40%"><br></div>    
 
 
 <p>梯度下降法用于求解一个函数J(θ)的最大值或者最小值，而一个函数沿着梯度下降的方向是下降最快的，导数为0的那一点就是最值点。<br>现在目标是更新θ使得J(θ)最小，先选个初始值，然后不断往梯度的方向更新θ，直到θ的值不再改变。更新公式中学习率决定下降步伐，梯度决定下降方向。学习率用于控制迭代速度，取值太小会导致迭代过慢，取值太大可能错过最值点。</p>
@@ -340,7 +340,7 @@
 <p>随机梯度下降：依次使用第i个样本进行更新。缺点是它可能在全局最优解的附近徘徊，但是总体趋向全局最小值。</p>
 <h3 id="4-权重共享"><a href="#4-权重共享" class="headerlink" title="4. 权重共享"></a>4. 权重共享</h3><p>这是减少参数数量的关键！</p>
 <h4 id="循环神经网络-RNN"><a href="#循环神经网络-RNN" class="headerlink" title="循环神经网络 RNN"></a>循环神经网络 RNN</h4><p>在时间步长上共享参数</p>
-<div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/rnn.png?raw=true" style="zoom:60%"><br></div>
+<div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/rnn.png?raw=true" style="zoom:50%"><br></div>
 
 
 <h4 id="卷积神经网络-CNN"><a href="#卷积神经网络-CNN" class="headerlink" title="卷积神经网络 CNN"></a>卷积神经网络 CNN</h4><p>在空间区域中共享参数。</p>
@@ -352,7 +352,7 @@
 
 <p>（下面这段话引用自chenrudan）</p>
 <p>强化学习是多学科多领域交叉的一个产物，它的本质就是解决“decision making”问题，即学会自动进行决策。在computer science领域体现为机器学习算法。在Engineering领域体现在决定the sequence of actions来得到最好的结果。在Neuroscience领域体现在理解人类大脑如何做出决策，主要的研究是reward system。在Psychology领域，研究动物如何做出决策，动物的行为是由什么导致的。在Economics领域体现在博弈论的研究。</p>
-<h3 id="2-基本概念"><a href="#2-基本概念" class="headerlink" title="2.  基本概念"></a>2.  基本概念</h3><h4 id="Agent-和-Environment"><a href="#Agent-和-Environment" class="headerlink" title="Agent 和 Environment"></a>Agent 和 Environment</h4><div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/agent.png?raw=true" style="zoom:60%"><br></div>
+<h3 id="2-基本概念"><a href="#2-基本概念" class="headerlink" title="2.  基本概念"></a>2.  基本概念</h3><h4 id="Agent-和-Environment"><a href="#Agent-和-Environment" class="headerlink" title="Agent 和 Environment"></a>Agent 和 Environment</h4><div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/agent.png?raw=true" style="zoom:50%"><br></div>
 
 <p>在每个时刻下：</p>
 <p>Agent:执行某个action at，然后接收来自环境的观察值ot与瞬时奖励rt</p>
