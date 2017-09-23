@@ -291,8 +291,7 @@
           
             <p>本文翻译自David Silver的《Tutorial: Deep Reinforcement Learning》</p>
 <p>这是一篇阅读笔记，如有写错，请联系susht3@foxmail.com，一起讨论。</p>
-<p>####本文结构</p>
-<p>一. 前言</p>
+<h4 id="本文结构"><a href="#本文结构" class="headerlink" title="本文结构"></a>本文结构</h4><p>一. 前言</p>
 <p>二. 深度学习简介</p>
 <p>三. 强化学习简介</p>
 <p>四. 基于value的强化学习</p>
@@ -322,8 +321,7 @@
 <div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/loss.png?raw=true" style="zoom:50%"><br></div>
 
 <p>有多种loss函数，平方差，对数似然函数，交叉熵等等。</p>
-<p>###3. 随机梯度下降法</p>
-<p>对loss求导：</p>
+<h3 id="3-随机梯度下降法"><a href="#3-随机梯度下降法" class="headerlink" title="3. 随机梯度下降法"></a>3. 随机梯度下降法</h3><p>对loss求导：</p>
 <div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/der.png?raw=true" style="zoom:50%"><br></div>
 
 
@@ -332,25 +330,20 @@
 
 
 <p>梯度下降法用于求解一个函数J(θ)的最大值或者最小值，而一个函数沿着梯度下降的方向是下降最快的，导数为0的那一点就是最值点。<br>现在目标是更新θ使得J(θ)最小，先选个初始值，然后不断往梯度的方向更新θ，直到θ的值不再改变。更新公式中学习率决定下降步伐，梯度决定下降方向。学习率用于控制迭代速度，取值太小会导致迭代过慢，取值太大可能错过最值点。</p>
-<p>#####下山例子</p>
-<div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/moutain.png?raw=true" style="zoom:60%"><br></div>
+<h5 id="下山例子"><a href="#下山例子" class="headerlink" title="下山例子"></a>下山例子</h5><div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/moutain.png?raw=true" style="zoom:60%"><br></div>
 
 <p>这里纵坐标表示目函数的值（即 J( θ) 的值），两个横坐标分别表示参数 θ1 和 θ2。从初始点开总是往下降速度最快的地方走 ，这个地方也就是该点的梯度。</p>
-<p>#####二维的等高线图</p>
-<div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/two.png?raw=true" style="zoom:60%"><br></div>
+<h5 id="二维的等高线图"><a href="#二维的等高线图" class="headerlink" title="二维的等高线图"></a>二维的等高线图</h5><div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/two.png?raw=true" style="zoom:60%"><br></div>
 
 <p>迭代特点：局部最优解<br>初始值有影响，初始值不同，得到的最小值也有不同；每一步都选择梯度下降的方向走，越是接近最小值，下降速度就越慢。</p>
 <p>批量梯度下降：每次更新都遍历m个训练样本。缺点是训练集很大的时候，耗时太长。</p>
 <p>随机梯度下降：依次使用第i个样本进行更新。缺点是它可能在全局最优解的附近徘徊，但是总体趋向全局最小值。</p>
-<p>###4. 权重共享</p>
-<p>这是减少参数数量的关键！</p>
-<p>####循环神经网络 RNN</p>
-<p>在时间步长上共享参数</p>
+<h3 id="4-权重共享"><a href="#4-权重共享" class="headerlink" title="4. 权重共享"></a>4. 权重共享</h3><p>这是减少参数数量的关键！</p>
+<h4 id="循环神经网络-RNN"><a href="#循环神经网络-RNN" class="headerlink" title="循环神经网络 RNN"></a>循环神经网络 RNN</h4><p>在时间步长上共享参数</p>
 <div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/rnn.png?raw=true" style="zoom:60%"><br></div>
 
 
-<p>####卷积神经网络 CNN</p>
-<p>在空间区域中共享参数。</p>
+<h4 id="卷积神经网络-CNN"><a href="#卷积神经网络-CNN" class="headerlink" title="卷积神经网络 CNN"></a>卷积神经网络 CNN</h4><p>在空间区域中共享参数。</p>
 <div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/cnn.png?raw=true" style="zoom:60%"><br></div>
 
 <p>局部连接+权重共享。局部连接，每个隐藏层节点每次都只连接到一个局部区域。权重共享，卷积核的权重参数共享到所有的神经元。</p>
@@ -359,37 +352,33 @@
 
 <p>（下面这段话引用自chenrudan）</p>
 <p>强化学习是多学科多领域交叉的一个产物，它的本质就是解决“decision making”问题，即学会自动进行决策。在computer science领域体现为机器学习算法。在Engineering领域体现在决定the sequence of actions来得到最好的结果。在Neuroscience领域体现在理解人类大脑如何做出决策，主要的研究是reward system。在Psychology领域，研究动物如何做出决策，动物的行为是由什么导致的。在Economics领域体现在博弈论的研究。</p>
-<h3 id="2-基本概念"><a href="#2-基本概念" class="headerlink" title="2.  基本概念"></a>2.  基本概念</h3><p>####Agent 和 Environment</p>
-<div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/agent.png?raw=true" style="zoom:60%"><br></div>
+<h3 id="2-基本概念"><a href="#2-基本概念" class="headerlink" title="2.  基本概念"></a>2.  基本概念</h3><h4 id="Agent-和-Environment"><a href="#Agent-和-Environment" class="headerlink" title="Agent 和 Environment"></a>Agent 和 Environment</h4><div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/agent.png?raw=true" style="zoom:60%"><br></div>
 
 <p>在每个时刻下：</p>
 <p>Agent:执行某个action at，然后接收来自环境的观察值ot与瞬时奖励rt</p>
 <p>Environment:接收来自agent 的一个动作action，发出观察信号o(t+1)，和奖励信号r(t+1)</p>
 <p>(confuse：这里我觉得应该是ot和rt，也有可能是因为延时？)</p>
-<p>####State </p>
-<div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/state.png?raw=true" style="zoom:60%"><br></div>
+<h4 id="State"><a href="#State" class="headerlink" title="State"></a>State</h4><div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/state.png?raw=true" style="zoom:60%"><br></div>
 
 <p>Experience(历史状态):包含一系列的从第一个时刻开始的observations, actions, rewards</p>
 <p>State(状态):<br>state是experience的总和。在某个时刻t下，状态state st是这个时刻以及之前所有时刻的所有历史状态的函数。其实严格意义上有两种state：environment state是环境自身的状态，agent state是环境反馈给agent的状态，也就是平常简称的state。环境会通过observation来告诉agent当前的环境状态。</p>
 <p>观测性:在一个全观测的环境中，agent state等同于environment state。在某个时刻t下，state是当前时刻下观测值ot的一个函数，这里具备马尔科夫性质。在一个部分可观测的环境中，那么agent获取到的就不是最直接的environment state。</p>
-<p>###3. Agent的组成</p>
-<p>一个Agent由policy,value function和model这三部分组成，但是这三部分不是必须要存在的。</p>
-<p>####Policy<br>policy是agent的决策行为，根据state来选择action，函数形式是将state映射为action，包含两种表达方式。确定性策略根据state直接选择某个action。随机性策略根据state生成action的概率分布，再从中选择action。</p>
+<h3 id="3-Agent的组成"><a href="#3-Agent的组成" class="headerlink" title="3. Agent的组成"></a>3. Agent的组成</h3><p>一个Agent由policy,value function和model这三部分组成，但是这三部分不是必须要存在的。</p>
+<h4 id="Policy"><a href="#Policy" class="headerlink" title="Policy"></a>Policy</h4><p>policy是agent的决策行为，根据state来选择action，函数形式是将state映射为action，包含两种表达方式。确定性策略根据state直接选择某个action。随机性策略根据state生成action的概率分布，再从中选择action。</p>
 <div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/policy.png?raw=true" style="zoom:60%"><br></div>
 
-<p>####Value function<br>value函数预测当前state s下，未来可能获得的reward的期望，用来衡量当前state的好坏。Vπ(s)=Eπ[Rt+1+rRt+2+…|St=s]，已有policy去选择action。而Q函数是奖励总值的期望，给定state s，action a，policy π，以及衰减因子γ，计算综合奖励的期望。Q用来衡量当前state下选择某个action的好坏。</p>
+<h4 id="Value-function"><a href="#Value-function" class="headerlink" title="Value function"></a>Value function</h4><p>value函数预测当前state s下，未来可能获得的reward的期望，用来衡量当前state的好坏。Vπ(s)=Eπ[Rt+1+rRt+2+…|St=s]，已有policy去选择action。而Q函数是奖励总值的期望，给定state s，action a，policy π，以及衰减因子γ，计算综合奖励的期望。Q用来衡量当前state下选择某个action的好坏。</p>
 <div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/value.png?raw=true" style="zoom:60%"><br></div>
 
 <p>注意！V和Q的区别在于，v是state value，Q是state-action value。Q里面的action a，不是用这个policy去算当前的action，而是当前state s已经采取了这个action a，后面的state s’再利用这个policy去选择后面的action a’，得到后面的reward。</p>
-<p>#####如何更新value：</p>
-<div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/update.png?raw=true" style="zoom:60%"><br></div>
+<h5 id="如何更新value："><a href="#如何更新value：" class="headerlink" title="如何更新value："></a>如何更新value：</h5><div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/update.png?raw=true" style="zoom:60%"><br></div>
 
 <p>v可以采取某个policy选择一个action，或者遍历所有action选择v最大的。公式左边是即时奖励，右边是带有衰减因子的未来奖励。</p>
-<p>#####贝尔曼方程<br>Q函数还可以分解为贝尔曼方程：</p>
+<h5 id="贝尔曼方程"><a href="#贝尔曼方程" class="headerlink" title="贝尔曼方程"></a>贝尔曼方程</h5><p>Q函数还可以分解为贝尔曼方程：</p>
 <div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/bell.png?raw=true" style="zoom:60%"><br></div>
 
 <p>后面的r用Q(s’)来表示，s’为当前state s的下一个状态，a’为下一个action<br>Q函数是一个期望！关于后面state和action的一个期望。</p>
-<p>#####优化价值函数<br>就是使得价值函数达到最大值。给定state s和action a，计算在所有policy下，当前state和action的Q函数，而最大的Q就是当前state和action下最优的Q函数。也就是说，在当前state下，每个action都有一个最优的Q函数。然后遍历所有action，在这些最优Q当中，再次选择一个最大Q，选择这个最大Q的action，以此作为当前state下的policy π。</p>
+<h5 id="优化价值函数"><a href="#优化价值函数" class="headerlink" title="优化价值函数"></a>优化价值函数</h5><p>就是使得价值函数达到最大值。给定state s和action a，计算在所有policy下，当前state和action的Q函数，而最大的Q就是当前state和action下最优的Q函数。也就是说，在当前state下，每个action都有一个最优的Q函数。然后遍历所有action，在这些最优Q当中，再次选择一个最大Q，选择这个最大Q的action，以此作为当前state下的policy π。</p>
 <div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/optim.png?raw=true" style="zoom:60%"><br></div>
 
 <p>注意：最优Q是带有星号的Q<em>，Q</em>其实就是在Q中挑选出最优的那个。</p>
@@ -397,7 +386,7 @@
 <div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/bell2.png?raw=true" style="zoom:60%"><br></div>
 
 <p>Q和Q<em>的贝尔曼方程区别在于，Q是对s’和a’的期望，<br>Q</em>是对s’的期望，因为Q*会选择使得Q(s’，a’)最大的action a’</p>
-<p>####Model<br>Model从经历中学习，学习环境的工作方式，预测下一个state或者下一次reward。</p>
+<h4 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h4><p>Model从经历中学习，学习环境的工作方式，预测下一个state或者下一次reward。</p>
 <div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/model.png?raw=true" style="zoom:60%"><br></div>
 
 
@@ -410,40 +399,37 @@
 <p>控制物理系统：操作、步行、游泳</p>
 <p>与用户互动：推荐、优化、个性化</p>
 <p>实现方法：使用深度学习去模拟Q，policy，model，再用随机梯度下降法去优化loss函数。</p>
-<h2 id="四-基于value的深度学习"><a href="#四-基于value的深度学习" class="headerlink" title="四. 基于value的深度学习"></a>四. 基于value的深度学习</h2><p>###1. Q网络<br>用神经网络对Q进行建模：</p>
+<h2 id="四-基于value的深度学习"><a href="#四-基于value的深度学习" class="headerlink" title="四. 基于value的深度学习"></a>四. 基于value的深度学习</h2><h3 id="1-Q网络"><a href="#1-Q网络" class="headerlink" title="1. Q网络"></a>1. Q网络</h3><p>用神经网络对Q进行建模：</p>
 <p>第一类做法： 输入s与a，输出一个Q(s，a，w)值，其中w为网络权重</p>
 <p>第二类做法： 输入s，输出一个Q(s，ai，w)的向量，维度为action的维度大小</p>
 <div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/dqn.png?raw=true" style="zoom:60%"><br></div>
 
 
 
-<p>###2. Q-Learning算法</p>
-<p>####目标函数<br>把最优的Q*定义为我们要求的目标，用随机梯度下降法去最小化均方差MSE</p>
+<h3 id="2-Q-Learning算法"><a href="#2-Q-Learning算法" class="headerlink" title="2. Q-Learning算法"></a>2. Q-Learning算法</h3><h4 id="目标函数"><a href="#目标函数" class="headerlink" title="目标函数"></a>目标函数</h4><p>把最优的Q*定义为我们要求的目标，用随机梯度下降法去最小化均方差MSE</p>
 <div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/q-learn.png?raw=true" style="zoom:60%"><br></div>
 
 
-<p>####神经网络所产生的问题</p>
-<p>采样之间的相关性：当前的state和action和上一步执行的action非常接近！数据集具备序列性质，具有很强的相关性。</p>
+<h4 id="神经网络所产生的问题"><a href="#神经网络所产生的问题" class="headerlink" title="神经网络所产生的问题"></a>神经网络所产生的问题</h4><p>采样之间的相关性：当前的state和action和上一步执行的action非常接近！数据集具备序列性质，具有很强的相关性。</p>
 <p>目标的不稳定性：注意 我们学习的目标是依赖于目标本身的。不平稳性会导致近似函数螺旋式失控，policy会有震荡。</p>
 <p>为了解决这些问题，接下来会介绍DQN算法。</p>
-<p>###3. DQN算法</p>
-<p>####经验回放<br>从过往的经历构建出一个数据集(s，a，r’，s’)，从这个数据集中随机采样一些经历(s，a，r，s’)进行更新。</p>
+<h3 id="3-DQN算法"><a href="#3-DQN算法" class="headerlink" title="3. DQN算法"></a>3. DQN算法</h3><h4 id="经验回放"><a href="#经验回放" class="headerlink" title="经验回放"></a>经验回放</h4><p>从过往的经历构建出一个数据集(s，a，r’，s’)，从这个数据集中随机采样一些经历(s，a，r，s’)进行更新。</p>
 <div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/experience.png?raw=true" style="zoom:60%"><br></div>
 
 <p>这些采样出来的经历是独立分布的，这样就可以打破训练集之间的相关性。</p>
 <p>注意！构建数据集的时候使用(s，a，r’，s’)，但是采样的时候使用(s，a，r，s’)。为啥？还是因为 延迟性？？mark</p>
-<p>####固定target-Q网络<br>公式左边是target Q，右边是我们训练的Q网络。使用MSE损失函数。</p>
+<h4 id="固定target-Q网络"><a href="#固定target-Q网络" class="headerlink" title="固定target-Q网络"></a>固定target-Q网络</h4><p>公式左边是target Q，右边是我们训练的Q网络。使用MSE损失函数。</p>
 <div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/target.png?raw=true" style="zoom:60%"><br></div>
 
 <p>这里暂时hold住Q网络以前的权重w-，用这个固定住的参数w-去算target Q，然后周期性更新W-为w。而Q网络仍是你Q网络，Q网络是时刻更新的，只是target Q会暂时固定住的。这样可以减少震荡。</p>
-<p>####剪切回报/值范围<br>设置reward在[-1，+1]范围内，可以保证Q的值不会太大，好求梯度。</p>
+<h4 id="剪切回报-值范围"><a href="#剪切回报-值范围" class="headerlink" title="剪切回报/值范围"></a>剪切回报/值范围</h4><p>设置reward在[-1，+1]范围内，可以保证Q的值不会太大，好求梯度。</p>
 <h4 id="DQN玩Atari游戏"><a href="#DQN玩Atari游戏" class="headerlink" title="DQN玩Atari游戏"></a>DQN玩Atari游戏</h4><p>从像素s中端到端学习Q（s，a），输入是前面4帧的像素，作为state，输出是对应按钮位置的Q（s，a），那么reward就是执行这个action后，得分和从前的差值了。</p>
 <div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/atari.png?raw=true" style="zoom:60%"><br></div>    
 
 
 
 <p>接下来会介绍一些基于DQN的改进方法。</p>
-<p>####4. Double-DQN<br>用两个网络，Q(w-)用于选择action，Q(w)用于评估action</p>
+<h4 id="4-Double-DQN"><a href="#4-Double-DQN" class="headerlink" title="4. Double-DQN"></a>4. Double-DQN</h4><p>用两个网络，Q(w-)用于选择action，Q(w)用于评估action</p>
 <div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/doubleQ.png?raw=true" style="zoom:60%"><br></div>    
 
 
@@ -452,20 +438,18 @@
 <div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/replay.png?raw=true" style="zoom:60%"><br></div>    
 
 
-<p>####6. 决斗网络<br>将Q网络分成两个channel，Action-indepent用于计算当忽略了某些动作时 你会得到多少奖励。在V(s，v)中，小v是V网络的参数，s是state。Action-dependent用于计算当你采取了某个动作a时 你会得到多少好处。最后结合这两部分，总和作为Q。</p>
+<h4 id="6-决斗网络"><a href="#6-决斗网络" class="headerlink" title="6. 决斗网络"></a>6. 决斗网络</h4><p>将Q网络分成两个channel，Action-indepent用于计算当忽略了某些动作时 你会得到多少奖励。在V(s，v)中，小v是V网络的参数，s是state。Action-dependent用于计算当你采取了某个动作a时 你会得到多少好处。最后结合这两部分，总和作为Q。</p>
 <div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/duelling.png?raw=true" style="zoom:60%"><br></div>    
 
 
 
-<p>####加速训练<br>Gorila结构，使用不同机器，并行化运行Q网络。</p>
+<h4 id="加速训练"><a href="#加速训练" class="headerlink" title="加速训练"></a>加速训练</h4><p>Gorila结构，使用不同机器，并行化运行Q网络。</p>
 <p>如果你没有google的资源，还可以使用异步强化学习：利用标准 CPU 的多线程；并行执行agent的多个实例；线程间共享网络参数；并行消除数据相关性；替代经历回放；在单个机器上模仿Gorila的加速过程。</p>
-<p>##五. 基于policy的强化学习</p>
-<p>###1. Deep Policy Networks</p>
-<h4 id="策略方式"><a href="#策略方式" class="headerlink" title="策略方式"></a>策略方式</h4><p>随机性policy：根据state生成action的概率分布，表示在某个state下执行某个action的概率。随机性policy比确定性policy要好。</p>
+<h2 id="五-基于policy的强化学习"><a href="#五-基于policy的强化学习" class="headerlink" title="五. 基于policy的强化学习"></a>五. 基于policy的强化学习</h2><h3 id="1-Deep-Policy-Networks"><a href="#1-Deep-Policy-Networks" class="headerlink" title="1. Deep Policy Networks"></a>1. Deep Policy Networks</h3><h4 id="策略方式"><a href="#策略方式" class="headerlink" title="策略方式"></a>策略方式</h4><p>随机性policy：根据state生成action的概率分布，表示在某个state下执行某个action的概率。随机性policy比确定性policy要好。</p>
 <p>确定性policy：根据state直接生成action</p>
 <div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/policy2.png?raw=true" style="zoom:60%"><br></div>        
 
-<p>####目标函数<br>将目标函数定义为 总reward，使用随机梯度下降法来最大化目标函数。</p>
+<h4 id="目标函数-1"><a href="#目标函数-1" class="headerlink" title="目标函数"></a>目标函数</h4><p>将目标函数定义为 总reward，使用随机梯度下降法来最大化目标函数。</p>
 <div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/object.png?raw=true" style="zoom:60%"><br></div>    
 
 <p>这个写法感觉有点怪怪的，其中u是网络的参数，π是policy，点号不知道是什么。可以写成，在这个policy下，所有action对应的的总reward的期望。目标形式依然是优化Q，但是和前面不同的是，这里Q的参数是policy的参数。</p>
@@ -474,22 +458,20 @@
 
 <p>对于随机性policy，把L(u)写成E的形式再求导，就可以得到图中结果。公式中第一项是score function，用来衡量policy选择这个action的程度，第二项是Q，用来衡量这个action的好坏。如果这个action表现较好，我们就调整policy趋近这个action，最终拉近这两个分布。</p>
 <p>对于确定性policy，链式求导。</p>
-<p>###2.  Actor-Critic算法<br>Actor-Critic算法包含两个网络，Actor 网络用于选择action，Critic 网络用于评估这个action的好坏程度，计算value function，去指导Actor网络更新梯度。Actor基于policy gradients，可以在连续的actio空间选择一个action，而critic基于Q-learning，可以进行单步更新，注意policy gradient是回合更新，会降低学习效率。所以Actor-Critic是结合了基于policy和基于value的方法。</p>
-<p>####Actor 网络<br>Actor网络用于学习policy，输入state，输出action</p>
-<p>###Critic 网络</p>
-<p>Critic网络用于学习Q，以评估action的好坏，输入state和action，输出对应的Q，Critic的目标就是估计这个policy的贝尔曼方程。</p>
+<h3 id="2-Actor-Critic算法"><a href="#2-Actor-Critic算法" class="headerlink" title="2.  Actor-Critic算法"></a>2.  Actor-Critic算法</h3><p>Actor-Critic算法包含两个网络，Actor 网络用于选择action，Critic 网络用于评估这个action的好坏程度，计算value function，去指导Actor网络更新梯度。Actor基于policy gradients，可以在连续的actio空间选择一个action，而critic基于Q-learning，可以进行单步更新，注意policy gradient是回合更新，会降低学习效率。所以Actor-Critic是结合了基于policy和基于value的方法。</p>
+<h4 id="Actor-网络"><a href="#Actor-网络" class="headerlink" title="Actor 网络"></a>Actor 网络</h4><p>Actor网络用于学习policy，输入state，输出action</p>
+<h3 id="Critic-网络"><a href="#Critic-网络" class="headerlink" title="Critic 网络"></a>Critic 网络</h3><p>Critic网络用于学习Q，以评估action的好坏，输入state和action，输出对应的Q，Critic的目标就是估计这个policy的贝尔曼方程。</p>
 <p>那么接下来actor就可以用这个Q去更新自己的梯度，往提高Q的方向去更新。</p>
 <div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/critic.png?raw=true" style="zoom:60%"><br></div>    
 
 <p>这里w是critic的参数，u是actor的参数，这里是对u求导，以更新policy。</p>
-<p>###3.  Asynchronous Advantage Actor-Critic (A3C)</p>
-<p>V是state-value function，用于评估在当前state的好坏。<br>Q则是state-action value，这里和之前定义的Q所有不同，这里只有前n个reward是用reward来算，后面的reward总值使用V去评估。</p>
+<h3 id="3-Asynchronous-Advantage-Actor-Critic-A3C"><a href="#3-Asynchronous-Advantage-Actor-Critic-A3C" class="headerlink" title="3.  Asynchronous Advantage Actor-Critic (A3C)"></a>3.  Asynchronous Advantage Actor-Critic (A3C)</h3><p>V是state-value function，用于评估在当前state的好坏。<br>Q则是state-action value，这里和之前定义的Q所有不同，这里只有前n个reward是用reward来算，后面的reward总值使用V去评估。</p>
 <div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/q.png?raw=true" style="zoom:60%"><br></div>        
 
-<h4 id="Actor-网络"><a href="#Actor-网络" class="headerlink" title="Actor 网络"></a>Actor 网络</h4><p>与先前actor不同的地方是，公式右边变成Q-V，这个就叫Advantage，表示采取这个action比平均state下要好出多少。</p>
+<h4 id="Actor-网络-1"><a href="#Actor-网络-1" class="headerlink" title="Actor 网络"></a>Actor 网络</h4><p>与先前actor不同的地方是，公式右边变成Q-V，这个就叫Advantage，表示采取这个action比平均state下要好出多少。</p>
 <div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/actor.png?raw=true" style="zoom:60%"><br></div>        
 
-<h4 id="Critic-网络"><a href="#Critic-网络" class="headerlink" title="Critic 网络"></a>Critic 网络</h4><p>Critic网络评估的是V值，目标函数是 根据q 和V 的MSE函数。</p>
+<h4 id="Critic-网络-1"><a href="#Critic-网络-1" class="headerlink" title="Critic 网络"></a>Critic 网络</h4><p>Critic网络评估的是V值，目标函数是 根据q 和V 的MSE函数。</p>
 <div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/critic2.png?raw=true" style="zoom:60%"><br></div>    
 
 <p>咩咩咩？？？mark</p>
@@ -497,8 +479,7 @@
 <div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/lab.png?raw=true" style="zoom:60%"><br></div>    
 
 
-<p>###DRL如何处理高维连续action空间？</p>
-<ol>
+<h3 id="DRL如何处理高维连续action空间？"><a href="#DRL如何处理高维连续action空间？" class="headerlink" title="DRL如何处理高维连续action空间？"></a>DRL如何处理高维连续action空间？</h3><ol>
 <li><p>如果对Q算一个max，计算量会非常大。</p>
 <p> Actor-Critic算法不需要算max Q，避开了这个问题。</p>
 </li>
@@ -506,13 +487,13 @@
 <p> 确定性的policy gradient会对Q求导。</p>
 </li>
 </ol>
-<p>###4. Deep DPG<br>DDPG同时借鉴了DQN和Actor-Critic，DDPG的优势在于连续action空间。</p>
-<h4 id="经验回放"><a href="#经验回放" class="headerlink" title="经验回放"></a>经验回放</h4><p>前面提到的。</p>
-<p>####Critic 网络<br>DDPG和DQN不一样的地方在于，DDPG多了个policy π，π的参数为u-，target-Q中会暂时hold住u-和w-</p>
+<h3 id="4-Deep-DPG"><a href="#4-Deep-DPG" class="headerlink" title="4. Deep DPG"></a>4. Deep DPG</h3><p>DDPG同时借鉴了DQN和Actor-Critic，DDPG的优势在于连续action空间。</p>
+<h4 id="经验回放-1"><a href="#经验回放-1" class="headerlink" title="经验回放"></a>经验回放</h4><p>前面提到的。</p>
+<h4 id="Critic-网络-2"><a href="#Critic-网络-2" class="headerlink" title="Critic 网络"></a>Critic 网络</h4><p>DDPG和DQN不一样的地方在于，DDPG多了个policy π，π的参数为u-，target-Q中会暂时hold住u-和w-</p>
 <div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/critic3.png?raw=true" style="zoom:60%"><br></div>    
 
 
-<h4 id="Actor-网络-1"><a href="#Actor-网络-1" class="headerlink" title="Actor 网络"></a>Actor 网络</h4><p>Actor网络更新的时候也是朝着提高Q的方向。</p>
+<h4 id="Actor-网络-2"><a href="#Actor-网络-2" class="headerlink" title="Actor 网络"></a>Actor 网络</h4><p>Actor网络更新的时候也是朝着提高Q的方向。</p>
 <div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/actor2.png?raw=true" style="zoom:60%"><br></div>    
 
 
@@ -520,134 +501,6 @@
 
 
 <h2 id="六-基于model的强化学习"><a href="#六-基于model的强化学习" class="headerlink" title="六. 基于model的强化学习"></a>六. 基于model的强化学习</h2><p>未完待续 暂时写不下去了….回宿舍</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/23/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="susht">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="susht">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/23/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-23T18:20:06+08:00">
-                2017-09-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
 
           
         
@@ -728,7 +581,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">1</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
