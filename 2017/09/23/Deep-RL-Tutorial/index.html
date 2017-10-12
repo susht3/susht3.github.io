@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="">
+<html class="theme-next mist use-motion" lang="en">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -69,13 +69,14 @@
 
 
 
-<meta name="description" content="本文翻译自David Silver的《Tutorial: Deep Reinforcement Learning》，这仅是一篇个人的阅读笔记，如有写错，请联系susht3@foxmail.com，一起讨论。 本文结构分为以下几部分： 一. 前言 二. 深度学习简介 三. 强化学习简介 四. 基于value的强化学习 五. 基于policy的强化学习 六. 基于model的强化学习 一. 前言深度学">
+<meta name="description" content="本文翻译自David Silver的《Tutorial: Deep Reinforcement Learning》，仅为个人笔记，如有写错，请联系susht3@foxmail.com，一起讨论。 本文结构分为以下几部分： 一. 前言 二. 深度学习简介 三. 强化学习简介 四. 基于value的强化学习 五. 基于policy的强化学习 六. 基于model的强化学习 一. 前言深度学习 vs 强">
 <meta name="keywords" content="RL">
 <meta property="og:type" content="article">
-<meta property="og:title" content="《Deep_RL_Tutorial》之入门强化学习">
+<meta property="og:title" content="《Deep_RL_Tutorial》阅读笔记">
 <meta property="og:url" content="http://yoursite.com/2017/09/23/Deep-RL-Tutorial/index.html">
 <meta property="og:site_name" content="susht">
-<meta property="og:description" content="本文翻译自David Silver的《Tutorial: Deep Reinforcement Learning》，这仅是一篇个人的阅读笔记，如有写错，请联系susht3@foxmail.com，一起讨论。 本文结构分为以下几部分： 一. 前言 二. 深度学习简介 三. 强化学习简介 四. 基于value的强化学习 五. 基于policy的强化学习 六. 基于model的强化学习 一. 前言深度学">
+<meta property="og:description" content="本文翻译自David Silver的《Tutorial: Deep Reinforcement Learning》，仅为个人笔记，如有写错，请联系susht3@foxmail.com，一起讨论。 本文结构分为以下几部分： 一. 前言 二. 深度学习简介 三. 强化学习简介 四. 基于value的强化学习 五. 基于policy的强化学习 六. 基于model的强化学习 一. 前言深度学习 vs 强">
+<meta property="og:locale" content="en">
 <meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/deep.png?raw=true">
 <meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/back.png?raw=true">
 <meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/linear.png?raw=true">
@@ -116,10 +117,10 @@
 <meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/critic3.png?raw=true">
 <meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/actor2.png?raw=true">
 <meta property="og:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/sim.png?raw=true">
-<meta property="og:updated_time" content="2017-09-23T14:49:31.339Z">
+<meta property="og:updated_time" content="2017-10-12T12:23:07.199Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="《Deep_RL_Tutorial》之入门强化学习">
-<meta name="twitter:description" content="本文翻译自David Silver的《Tutorial: Deep Reinforcement Learning》，这仅是一篇个人的阅读笔记，如有写错，请联系susht3@foxmail.com，一起讨论。 本文结构分为以下几部分： 一. 前言 二. 深度学习简介 三. 强化学习简介 四. 基于value的强化学习 五. 基于policy的强化学习 六. 基于model的强化学习 一. 前言深度学">
+<meta name="twitter:title" content="《Deep_RL_Tutorial》阅读笔记">
+<meta name="twitter:description" content="本文翻译自David Silver的《Tutorial: Deep Reinforcement Learning》，仅为个人笔记，如有写错，请联系susht3@foxmail.com，一起讨论。 本文结构分为以下几部分： 一. 前言 二. 深度学习简介 三. 强化学习简介 四. 基于value的强化学习 五. 基于policy的强化学习 六. 基于model的强化学习 一. 前言深度学习 vs 强">
 <meta name="twitter:image" content="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/deep.png?raw=true">
 
 
@@ -128,7 +129,7 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Muse',
+    scheme: 'Mist',
     version: '5.1.2',
     sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
@@ -156,7 +157,7 @@
 
 
 
-  <title>《Deep_RL_Tutorial》之入门强化学习 | susht</title>
+  <title>《Deep_RL_Tutorial》阅读笔记 | susht</title>
   
 
 
@@ -168,7 +169,7 @@
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="">
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
 
   
   
@@ -217,6 +218,26 @@
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
             Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-resume">
+          <a href="/resume/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            resume
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
           </a>
         </li>
       
@@ -280,7 +301,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">《Deep_RL_Tutorial》之入门强化学习</h1>
+          <h1 class="post-title" itemprop="name headline">《Deep_RL_Tutorial》阅读笔记</h1>
         
 
         <div class="post-meta">
@@ -302,6 +323,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/强化学习/" itemprop="url" rel="index">
+                    <span itemprop="name">强化学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -330,7 +373,7 @@
       
 
       
-        <p>本文翻译自David Silver的《Tutorial: Deep Reinforcement Learning》，这仅是一篇个人的阅读笔记，如有写错，请联系susht3@foxmail.com，一起讨论。</p>
+        <p>本文翻译自David Silver的《Tutorial: Deep Reinforcement Learning》，仅为个人笔记，如有写错，请联系susht3@foxmail.com，一起讨论。</p>
 <p>本文结构分为以下几部分：</p>
 <p>一. 前言</p>
 <p>二. 深度学习简介</p>
@@ -341,7 +384,7 @@
 <h2 id="一-前言"><a href="#一-前言" class="headerlink" title="一. 前言"></a>一. 前言</h2><h3 id="深度学习-vs-强化学习"><a href="#深度学习-vs-强化学习" class="headerlink" title="深度学习 vs 强化学习"></a>深度学习 vs 强化学习</h3><p>深度学习是特征学习，给定一个目标，学习目标的特征，使用最原始的特征输入，利用最少的领域知识。</p>
 <p>强化学习是决策学习，针对具有选择action能力的agent，每个action都会影响到agent未来的状态state，利用一个标量的奖励reward来衡量成功度，目标是选择一系列的action以最大化未来的奖励reward。</p>
 <p>深度强化学习结合DL+RL，RL定义目标，DL给出计算过程。</p>
-<h2 id="二-深度学习简介"><a href="#二-深度学习简介" class="headerlink" title="二. 深度学习简介"></a>二. 深度学习简介</h2><p>深度学习是用来实现机器学习的一种方法！深度神经网络用于理解深度表征。</p>
+<h2 id="二-深度学习简介"><a href="#二-深度学习简介" class="headerlink" title="二. 深度学习简介"></a>二. 深度学习简介</h2><p>深度学习是用来实现机器学习的一种方法，深度神经网络用于理解深度表征。</p>
 <h3 id="1-深度表征"><a href="#1-深度表征" class="headerlink" title="1. 深度表征"></a>1. 深度表征</h3><p>深度表征由很多函数组成：</p>
 <div align="center"><br><img src="https://github.com/susht3/pictures_for_blog/blob/master/deep_rl_tutorial/deep.png?raw=true" style="zoom:40%"><br></div>
 
@@ -552,6 +595,30 @@
     
 
     
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>Donate</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="susht WeChat Pay"/>
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
 
     
 
@@ -647,6 +714,15 @@
           
 
           
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
 
           
             
@@ -664,6 +740,20 @@
         
 
         <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="mailto:susht3@foxmail.com" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/susht" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>知乎</a>
+              </span>
+            
           
         </div>
 
@@ -725,7 +815,7 @@
 
   <span class="post-meta-divider">|</span>
 
-  <div class="theme-info">Theme &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.2</div>
+  <div class="theme-info">Theme &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.2</div>
 
 
         
@@ -871,8 +961,7 @@
 
 </body>
 
-<!-- 页面点击小红心 -->
-<script type="text/javascript" src="/js/src/love.js"></script>
+
 
 
 </html>
