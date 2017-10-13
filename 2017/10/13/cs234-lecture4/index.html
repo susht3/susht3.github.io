@@ -89,8 +89,7 @@
 <meta property="og:image" content="http://latex.codecogs.com/gif.latex?Q^{*}&space;(s,a)&space;=&space;r(s,a)+\gamma&space;\sum_{s'\in&space;S&space;}&space;p(s'|a,s)V^{*}(s')">
 <meta property="og:image" content="http://latex.codecogs.com/gif.latex?\pi^{*}&space;(s,a)&space;=&space;arg\underset{a}max&space;\&space;Q^{*}(s,a)">
 <meta property="og:image" content="http://latex.codecogs.com/gif.latex?V_{k+1}^{\pi}(s,a)=r(s,\pi(s))+\gamma&space;\sum_{s'\in&space;S}p(s'|\pi(s),s)V_{k}^{\pi}(s')">
-<meta property="og:image" content="http://yoursite.com/2017/10/13/pics/cs234-lec4/gridworld">
-<meta property="og:image" content="http://yoursite.com/2017/10/13/pics/cs234-l4/gridworld">
+<meta property="og:image" content="https://github.com/susht3/susht3.github.io/blob/master/pics/cs234-lec4/gridworld.png?raw=true">
 <meta property="og:image" content="http://latex.codecogs.com/gif.latex?V_{k+1}^{\pi}(s,a)=r(s,\pi(s))+\gamma&space;\sum_{s'\in&space;S}p(s'|\pi(s),s)V_{k}^{\pi}(s')">
 <meta property="og:image" content="http://latex.codecogs.com/gif.latex?Q^{\pi_{i}}(s,a)=r(s,a)+\gamma&space;\sum_{s'\in&space;S}p(s'|s,a)V^{\pi_{i}}(s')">
 <meta property="og:image" content="http://latex.codecogs.com/gif.latex?\pi_{i+1}(s)&space;=&space;arg\underset{a}{max}&space;\&space;Q_{\pi_{i}}(s,a)">
@@ -112,7 +111,7 @@
 <meta property="og:image" content="http://latex.codecogs.com/gif.latex?R_{t+1}+\gamma&space;V(S_{t+1})">
 <meta property="og:image" content="http://latex.codecogs.com/gif.latex?R_{t+1}+\gamma&space;V(S_{t+1})-V(S_{t})">
 <meta property="og:image" content="http://latex.codecogs.com/gif.latex?G_{t}^{(n)}=R_{t+1}+\gamma&space;R_{t+2}&space;+...+\gamma&space;^{n-1}R_{t+n}&space;+&space;\gamma&space;^{n}V(S_{t+n})">
-<meta property="og:updated_time" content="2017-10-13T03:02:56.151Z">
+<meta property="og:updated_time" content="2017-10-13T03:26:23.352Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="cs234强化学习课程笔记-lecture4">
 <meta name="twitter:description" content="这段时间笔者在学习CS234强化学习课程，此文为Lecture1-Lecture4的总结博文。 本文结构：  MDP Planning  Bellman Equation，Value Iteration，Policy Iteration  Basic RL with Lookup Tables  Monte-Carlo Learning，Temporal-Difference Learning">
@@ -422,8 +421,7 @@
 <p><a href="http://www.codecogs.com/eqnedit.php?latex=V_{k&plus;1}^{\pi}(s,a)=r(s,\pi(s))&plus;\gamma&space;\sum_{s'\in&space;S}p(s'|\pi(s),s)V_{k}^{\pi}(s')" target="_blank"><img src="http://latex.codecogs.com/gif.latex?V_{k&plus;1}^{\pi}(s,a)=r(s,\pi(s))&plus;\gamma&space;\sum_{s'\in&space;S}p(s'|\pi(s),s)V_{k}^{\pi}(s')" title="V_{k+1}^{\pi}(s,a)=r(s,\pi(s))+\gamma \sum_{s'\in S}p(s'|\pi(s),s)V_{k}^{\pi}(s')"></a></p>
 </blockquote>
 <p>举一个网格的例子，左上角和右下角是目的地，每走一步reward-1，这里面设置policy是random policy，我们现在要计算每个网格state对应的value</p>
-<p><img src="../pics/cs234-lec4/gridworld" alt=""> </p>
-<div align="center"><br><img src="../pics/cs234-l4/gridworld" style="zoom:40%"><br></div>
+<div align="center"><br><img src="https://github.com/susht3/susht3.github.io/blob/master/pics/cs234-lec4/gridworld.png?raw=true" style="zoom:40%"><br></div>
 
 <p>K=0，初始化所有的state的取值v(s)为0</p>
 <p>K=1，根据贝尔曼方程，上一次迭代的v（s‘）都是0，这一次算出来的v(s)都是-1</p>
@@ -512,7 +510,12 @@
 <p>首先，蒙特卡洛的结果不变，因为MC对某个state求value的时候，是对这个state的return求均值，重复采样，相当于对多条相同的经历，求return的均值，均值是不变的，所以在first-visit中所有state对应的value依然是[1 1 1 0 0 0 0]</p>
 <p>在TD中，在这条经历的基础上，假设又采样出这些下面这些元祖，现在求TD的结果。最初在这个经历后，我们算出来s1的value值是a，其它state是0。然后用下面第一个元祖更新，reward是0，所以value都不变，第二个元祖，r=1，更新v(s1)=2a, 3a, 4a，则最后所有state对应的value就是[4α 0 0 0 0 0 0]</p>
 <p>最后一个问题，在TD中，这些元祖采样的顺序，会不会影响到算法的收敛？<br>这个肯定会影响的，因为我们是根据v（st+1）更新v(St)，采样顺序不同，v(st+1)就会不一样。那么，什么样的采样顺序才是一个好的顺序呢？应该先采那些临近后面state的样本。</p>
-<h3 id="Certainty-Equivalence"><a href="#Certainty-Equivalence" class="headerlink" title="Certainty Equivalence"></a>Certainty Equivalence</h3><h2 id="Generalization-in-Model-free-RL"><a href="#Generalization-in-Model-free-RL" class="headerlink" title="Generalization in Model-free RL"></a>Generalization in Model-free RL</h2><h3 id="Linear-Value-Function-Approximation-VFA"><a href="#Linear-Value-Function-Approximation-VFA" class="headerlink" title="Linear Value Function Approximation (VFA)"></a>Linear Value Function Approximation (VFA)</h3><h3 id="Monte-Carlo-with-VFA"><a href="#Monte-Carlo-with-VFA" class="headerlink" title="Monte Carlo with VFA"></a>Monte Carlo with VFA</h3><h3 id="TD-Learning-with-VFA"><a href="#TD-Learning-with-VFA" class="headerlink" title="TD Learning with VFA"></a>TD Learning with VFA</h3><h3 id="Incremental-Control-Algorithms"><a href="#Incremental-Control-Algorithms" class="headerlink" title="Incremental Control Algorithms"></a>Incremental Control Algorithms</h3>
+<h3 id="Certainty-Equivalence"><a href="#Certainty-Equivalence" class="headerlink" title="Certainty Equivalence"></a>Certainty Equivalence</h3><p>接下来我们讨论一下蒙特卡洛跟时序差分的收敛性。MC方法会收敛到最小化均方误差的解，而TD方法会收敛到MDP问题的解，会找出状态转移概率和reward函数，还是在解决MDP问题。</p>
+<p>考虑这个例子，有两个状态A和B，无衰减，现在给出这么8条经历，去算V(a)<br>(A, 0, B, 0)</p>
+<blockquote>
+<p>B, 1<br>B, 1<br>B, 1<br>B, 1<br>B, 1<br>B, 1<br>B, 0</p>
+</blockquote>
+<h2 id="Generalization-in-Model-free-RL"><a href="#Generalization-in-Model-free-RL" class="headerlink" title="Generalization in Model-free RL"></a>Generalization in Model-free RL</h2><h3 id="Linear-Value-Function-Approximation-VFA"><a href="#Linear-Value-Function-Approximation-VFA" class="headerlink" title="Linear Value Function Approximation (VFA)"></a>Linear Value Function Approximation (VFA)</h3><h3 id="Monte-Carlo-with-VFA"><a href="#Monte-Carlo-with-VFA" class="headerlink" title="Monte Carlo with VFA"></a>Monte Carlo with VFA</h3><h3 id="TD-Learning-with-VFA"><a href="#TD-Learning-with-VFA" class="headerlink" title="TD Learning with VFA"></a>TD Learning with VFA</h3><h3 id="Incremental-Control-Algorithms"><a href="#Incremental-Control-Algorithms" class="headerlink" title="Incremental Control Algorithms"></a>Incremental Control Algorithms</h3>
       
     </div>
     
