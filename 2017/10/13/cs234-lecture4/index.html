@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="RL," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="这段时间笔者在学习CS234强化学习课程，此文为Lecture1-Lecture4的总结博文。 本文结构：  MDP Planning  Bellman Equation，Value Iteration，Policy Iteration  Basic RL with Lookup Tables  Monte-Carlo Learning，Temporal-Difference Learning">
+<meta name="keywords" content="RL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cs234强化学习课程笔记-lecture4">
+<meta property="og:url" content="http://yoursite.com/2017/10/13/cs234-lecture4/index.html">
+<meta property="og:site_name" content="susht">
+<meta property="og:description" content="这段时间笔者在学习CS234强化学习课程，此文为Lecture1-Lecture4的总结博文。 本文结构：  MDP Planning  Bellman Equation，Value Iteration，Policy Iteration  Basic RL with Lookup Tables  Monte-Carlo Learning，Temporal-Difference Learning">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?<S,A,P,R,\gamma>">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?\pi&space;(a|s)&space;=&space;P[A_{t}=a|S_{t}=s]">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?\pi&space;(a|s)&space;=&space;a">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?v_{\pi}(s)&space;=&space;E_{\pi}[G_{t}&space;|&space;S_{t}=s]">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?q_{\pi}(s,a)&space;=&space;E_{\pi}[G_{t}&space;|&space;S_{t}=s,A_{t}=a]">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?<S,A,P,R,\gamma>">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?V^{\pi}&space;(s,a)&space;=&space;r(s,\pi(s))+\gamma&space;\sum_{s'\in&space;S&space;}&space;p(s'|\pi(s),s)V^{\pi}(s')">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?Q^{\pi}&space;(s,a)&space;=&space;r(s,a)+\gamma&space;\sum_{s'\in&space;S&space;}&space;p(s'|a,s)V^{\pi}(s')">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?V^{*}&space;(s,a)&space;=&space;m\underset{a}ax\left&space;[&space;r(s,a)+\gamma&space;\sum_{s'\in&space;S&space;}&space;p(s'|a,s)V^{*}(s')&space;\right]">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?Q^{*}&space;(s,a)&space;=&space;r(s,a)+\gamma&space;\sum_{s'\in&space;S&space;}&space;p(s'|a,s)V^{*}(s')">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?\pi^{*}&space;(s,a)&space;=&space;arg\underset{a}max&space;\&space;Q^{*}(s,a)">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?V_{k+1}^{\pi}(s,a)=r(s,\pi(s))+\gamma&space;\sum_{s'\in&space;S}p(s'|\pi(s),s)V_{k}^{\pi}(s')">
+<meta property="og:image" content="http://yoursite.com/2017/10/13/pics/cs234-lec4/gridworld">
+<meta property="og:image" content="http://yoursite.com/2017/10/13/pics/cs234-l4/gridworld">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?V_{k+1}^{\pi}(s,a)=r(s,\pi(s))+\gamma&space;\sum_{s'\in&space;S}p(s'|\pi(s),s)V_{k}^{\pi}(s')">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?Q^{\pi_{i}}(s,a)=r(s,a)+\gamma&space;\sum_{s'\in&space;S}p(s'|s,a)V^{\pi_{i}}(s')">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?\pi_{i+1}(s)&space;=&space;arg\underset{a}{max}&space;\&space;Q_{\pi_{i}}(s,a)">
+<meta property="og:image" content="http://yoursite.com/2017/10/13/pics/cs234-lec4/gridworld2">
+<meta property="og:image" content="http://yoursite.com/2017/10/13/pics/cs234-lec4/gridworld3">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?V_{k+1}(s)=m\underset{a}ax&space;[r(s,a)+\gamma&space;\sum_{s'\in&space;S}p(s'|a,s)V_{k}(s')]">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?V_{\pi}(s)=V_{*}(s)&space;\if\and&space;\&space;only&space;\&space;if&space;\&space;V_{\pi}(s')=V_{*}(s')">
+<meta property="og:image" content="http://yoursite.com/2017/10/13/pics/cs234-lec4/gridworld">
+<meta property="og:image" content="http://yoursite.com/2017/10/13/pics/cs234-l4/gridworld">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?S_{1},A_{1},R_{2},S_{2},...S_{k}&space;\sim&space;k">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?G_{t}=&space;R_{t+1}&space;+\gamma&space;R_{t+2}&space;+...+&space;\gamma^{T-1}R_{T}">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?V_{\pi}(s)=E_{\pi}\left&space;[&space;R_{t+1}&space;+\gamma&space;R_{t+2}&space;+&space;\gamma^{2}R_{t+3}&space;+&space;...&space;|&space;S_{t}=s&space;\right&space;]">
+<meta property="og:image" content="http://yoursite.com/2017/10/13/pics/cs234-lec4/gridworld">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?N(S_{t})&space;\leftarrow&space;N(S_{t})&space;+&space;1">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?V(S_{t})&space;\leftarrow&space;V(S_{t})&space;+&space;\frac{1}{N(S_{t})}&space;(G_{t}&space;-&space;V(S_{t}))">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?V(S_{t})&space;\leftarrow&space;V(S_{t})&space;+&space;\alpha&space;(G_{t}&space;-&space;V(S_{t}))">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?R_{t+1}+\gamma&space;V(S_{t+1})">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?V(S_{t})&space;\leftarrow&space;V(S_{t})&space;+&space;\alpha&space;(R_{t+1}+\gamma&space;V(S_{t+1})&space;-&space;V(S_{t}))">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?R_{t+1}+\gamma&space;V(S_{t+1})">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?R_{t+1}+\gamma&space;V(S_{t+1})-V(S_{t})">
+<meta property="og:image" content="http://latex.codecogs.com/gif.latex?G_{t}^{(n)}=R_{t+1}+\gamma&space;R_{t+2}&space;+...+\gamma&space;^{n-1}R_{t+n}&space;+&space;\gamma&space;^{n}V(S_{t+n})">
+<meta property="og:updated_time" content="2017-10-13T03:02:56.151Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="cs234强化学习课程笔记-lecture4">
+<meta name="twitter:description" content="这段时间笔者在学习CS234强化学习课程，此文为Lecture1-Lecture4的总结博文。 本文结构：  MDP Planning  Bellman Equation，Value Iteration，Policy Iteration  Basic RL with Lookup Tables  Monte-Carlo Learning，Temporal-Difference Learning">
+<meta name="twitter:image" content="http://latex.codecogs.com/gif.latex?<S,A,P,R,\gamma>">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/10/13/cs234-lecture4/"/>
+
+
+
+
+
+  <title>cs234强化学习课程笔记-lecture4 | susht</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">susht</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/13/cs234-lecture4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="susht">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="susht">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">cs234强化学习课程笔记-lecture4</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-13T19:19:03+08:00">
+                2017-10-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/强化学习/" itemprop="url" rel="index">
+                    <span itemprop="name">强化学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这段时间笔者在学习CS234强化学习课程，此文为Lecture1-Lecture4的总结博文。</p>
+<p>本文结构：</p>
+<ol>
+<li>MDP Planning</li>
+</ol>
+<p>Bellman Equation，Value Iteration，Policy Iteration</p>
+<ol>
+<li>Basic RL with Lookup Tables</li>
+</ol>
+<p>Monte-Carlo Learning，Temporal-Difference Learning</p>
+<ol>
+<li>Generalization in Model-free RL</li>
+</ol>
+<p>Value Function Approximation(VFA)，MC with VFA, TD with VFA</p>
+<h2 id="一-MDP-Planning"><a href="#一-MDP-Planning" class="headerlink" title="一. MDP Planning"></a>一. MDP Planning</h2><p>在讲MDP Planing前先介绍一下MDP，马尔可夫决策过程。</p>
+<h3 id="Markov-Decision-Process"><a href="#Markov-Decision-Process" class="headerlink" title="Markov Decision Process"></a>Markov Decision Process</h3><p>马尔科夫决策过程，MDP可以表示成五元组<a href="http://www.codecogs.com/eqnedit.php?latex=<S,A,P,R,\gamma>" target="_blank"><img src="http://latex.codecogs.com/gif.latex?<S,A,P,R,\gamma>" title="<S,A,P,R,\gamma>"></a>，S表示一个有限的state集合，A表示一个有限的action集合，P是状态转移矩阵，在state s下执行action a 然后转移到状态s’的概率，γ是衰减因子，用来计算在state s后的未来总reward之和，也就是return。</p>
+<p>MDP会有一个policy π，这里的Policy是指，在state s 下，执行的action的概率分布，这个叫随机性policy，比如在state s 下，现在有两个action，action a1和action a2，那么假设执行action a1的概率是0.8，那么执行action a2的概率就是0.2，我们可能会执行action a1，也可能会执行action a2。</p>
+<blockquote>
+<p><a href="http://www.codecogs.com/eqnedit.php?latex=\pi&space;(a|s)&space;=&space;P[A_{t}=a|S_{t}=s]" target="_blank"><img src="http://latex.codecogs.com/gif.latex?\pi&space;(a|s)&space;=&space;P[A_{t}=a|S_{t}=s]" title="\pi (a|s) = P[A_{t}=a|S_{t}=s]"></a></p>
+</blockquote>
+<p>但是在确定性的policy中，它会告诉你执行action a1或者执行action a2。</p>
+<blockquote>
+<p><a href="http://www.codecogs.com/eqnedit.php?latex=\pi&space;(a|s)&space;=&space;a" target="_blank"><img src="http://latex.codecogs.com/gif.latex?\pi&space;(a|s)&space;=&space;a" title="\pi (a|s) = a"></a></p>
+</blockquote>
+<p>MDP还有两个价值函数，用来衡量当前的状况。Vπ（s）用来衡量state s的好坏程度，它是从当前state s开始，后面使用policy π去选择一系列action，得到的return的期望。</p>
+<blockquote>
+<p><a href="http://www.codecogs.com/eqnedit.php?latex=v_{\pi}(s)&space;=&space;E_{\pi}[G_{t}&space;|&space;S_{t}=s]" target="_blank"><img src="http://latex.codecogs.com/gif.latex?v_{\pi}(s)&space;=&space;E_{\pi}[G_{t}&space;|&space;S_{t}=s]" title="v_{\pi}(s) = E_{\pi}[G_{t} | S_{t}=s]"></a></p>
+</blockquote>
+<p>Qπ用来衡量在state s下执行action a的好坏程度，它是在当前state s下选择了action a，然后后面再去用policy π去选择后面的action，得到return的期望。</p>
+<blockquote>
+<p><a href="http://www.codecogs.com/eqnedit.php?latex=q_{\pi}(s,a)&space;=&space;E_{\pi}[G_{t}&space;|&space;S_{t}=s,A_{t}=a]" target="_blank"><img src="http://latex.codecogs.com/gif.latex?q_{\pi}(s,a)&space;=&space;E_{\pi}[G_{t}&space;|&space;S_{t}=s,A_{t}=a]" title="q_{\pi}(s,a) = E_{\pi}[G_{t} | S_{t}=s,A_{t}=a]"></a></p>
+</blockquote>
+<h3 id="MDP-Planning"><a href="#MDP-Planning" class="headerlink" title="MDP Planning"></a>MDP Planning</h3><p>MDP planning就是在已知MDP<a href="http://www.codecogs.com/eqnedit.php?latex=<S,A,P,R,\gamma>" target="_blank"><img src="http://latex.codecogs.com/gif.latex?<S,A,P,R,\gamma>" title="<S,A,P,R,\gamma>"></a>的情况下，去做planning。MDP planning跟强化学习都是序列决策问题，不同的地方在于，强化学习不知道外界的环境是怎么样的，MDP已经知道了环境是怎么样的。</p>
+<p>举个打游戏的例子，强化学习就相当于，不告诉你游戏规则就直接让你玩，你只知道你可以执行哪些action，但是你不知道执行什么样的行为是好的，什么样的行为是不好的，你也不知道执行了某个action会跳到一个什么样的state，所以你会不断去尝试去猜测这个游戏应该怎么玩。MDP planning就相当于在游戏当中开挂了，知道了自己执行某个action后的状态会是什么样，再去优化自己的policy。这两者之间是有联系的，强化学习既要学习这个游戏的规则，又要学习怎么做planning。</p>
+<p>在已知MDP的情况下，MDP planning要解决的问题有两种，第一种是prediction问题，给定一个policy，去评估一下这个policy怎么样，目标是算出在这个policy下，每个state的value function。第二种是control问题，这里也给出一个policy，但是它要去优化这个Policy，所以它的目标不仅是计算出最优的value function而且要给出最优的Policy。</p>
+<p>在MDP Planning中，用Iterative Policy Evaluation可以解决prediction问题，用Policy Iteration和Value Iteration可以解决controll问题。</p>
+<h3 id="Bellman-Equation"><a href="#Bellman-Equation" class="headerlink" title="Bellman Equation"></a>Bellman Equation</h3><p>贝尔曼方程，可以把一个问题划分成子问题求解，value function跟q function都可以表示成贝尔曼方程的形式，这里不再做贝尔曼方程的推导，只回顾贝尔曼方程的形式。</p>
+<p>贝尔曼方程分成两种，一种是期望方程，一种是最优方程。在贝尔曼期望方程当中，Vπ(s)是在state s下，基于policy π的价值函数，假设从s可以转移到s’，那么V(s) 就是关于V(s’)的期望。V用来衡量当前state的好坏，Q用来衡量在当前state的情况下，选择某个action的好坏程度。</p>
+<blockquote>
+<p><a href="http://www.codecogs.com/eqnedit.php?latex=V^{\pi}&space;(s,a)&space;=&space;r(s,\pi(s))&plus;\gamma&space;\sum_{s'\in&space;S&space;}&space;p(s'|\pi(s),s)V^{\pi}(s')" target="_blank"><img src="http://latex.codecogs.com/gif.latex?V^{\pi}&space;(s,a)&space;=&space;r(s,\pi(s))&plus;\gamma&space;\sum_{s'\in&space;S&space;}&space;p(s'|\pi(s),s)V^{\pi}(s')" title="V^{\pi} (s,a) = r(s,\pi(s))+\gamma \sum_{s'\in S } p(s'|\pi(s),s)V^{\pi}(s')"></a></p>
+<p><a href="http://www.codecogs.com/eqnedit.php?latex=Q^{\pi}&space;(s,a)&space;=&space;r(s,a)&plus;\gamma&space;\sum_{s'\in&space;S&space;}&space;p(s'|a,s)V^{\pi}(s')" target="_blank"><img src="http://latex.codecogs.com/gif.latex?Q^{\pi}&space;(s,a)&space;=&space;r(s,a)&plus;\gamma&space;\sum_{s'\in&space;S&space;}&space;p(s'|a,s)V^{\pi}(s')" title="Q^{\pi} (s,a) = r(s,a)+\gamma \sum_{s'\in S } p(s'|a,s)V^{\pi}(s')"></a></p>
+</blockquote>
+<p>对应的，在贝尔曼最优方程当中，V*(s)是在state s下，遍历所有的action，选择最大的value作为最优的value，其实V*(s)也是关于V*(s’)的期望。根据V*可以求出Q*，选择Q*对应的的action作为π*。</p>
+<blockquote>
+<p><a href="http://www.codecogs.com/eqnedit.php?latex=V^{*}&space;(s,a)&space;=&space;m\underset{a}ax\left&space;[&space;r(s,a)&plus;\gamma&space;\sum_{s'\in&space;S&space;}&space;p(s'|a,s)V^{*}(s')&space;\right]" target="_blank"><img src="http://latex.codecogs.com/gif.latex?V^{*}&space;(s,a)&space;=&space;m\underset{a}ax\left&space;[&space;r(s,a)&plus;\gamma&space;\sum_{s'\in&space;S&space;}&space;p(s'|a,s)V^{*}(s')&space;\right]" title="V^{*} (s,a) = m\underset{a}ax\left [ r(s,a)+\gamma \sum_{s'\in S } p(s'|a,s)V^{*}(s') \right]"></a></p>
+<p><a href="http://www.codecogs.com/eqnedit.php?latex=Q^{*}&space;(s,a)&space;=&space;r(s,a)&plus;\gamma&space;\sum_{s'\in&space;S&space;}&space;p(s'|a,s)V^{*}(s')" target="_blank"><img src="http://latex.codecogs.com/gif.latex?Q^{*}&space;(s,a)&space;=&space;r(s,a)&plus;\gamma&space;\sum_{s'\in&space;S&space;}&space;p(s'|a,s)V^{*}(s')" title="Q^{*} (s,a) = r(s,a)+\gamma \sum_{s'\in S } p(s'|a,s)V^{*}(s')"></a></p>
+<p><a href="http://www.codecogs.com/eqnedit.php?latex=\pi^{*}&space;(s,a)&space;=&space;arg\underset{a}max&space;\&space;Q^{*}(s,a)" target="_blank"><img src="http://latex.codecogs.com/gif.latex?\pi^{*}&space;(s,a)&space;=&space;arg\underset{a}max&space;\&space;Q^{*}(s,a)" title="\pi^{*} (s,a) = arg\underset{a}max \ Q^{*}(s,a)"></a></p>
+</blockquote>
+<h3 id="Iterative-Policy-Evaluation"><a href="#Iterative-Policy-Evaluation" class="headerlink" title="Iterative Policy Evaluation"></a>Iterative Policy Evaluation</h3><p>把v用贝尔曼方程的形式表示出来后，我们就可以迭代去计算V函数。</p>
+<p>迭代策略评估，要解决的问题是，评估一个policy，也就是基于当前的Policy，计算出每个状态的value function，目标是在已知policy下得到收敛的value function。迭代策略评估使用贝尔曼期望方程去更新value值，假设state s能到达state s’，那么第k+1次迭代中衡量state s的V，用第k次迭代中s’的V去更新。</p>
+<blockquote>
+<p><a href="http://www.codecogs.com/eqnedit.php?latex=V_{k&plus;1}^{\pi}(s,a)=r(s,\pi(s))&plus;\gamma&space;\sum_{s'\in&space;S}p(s'|\pi(s),s)V_{k}^{\pi}(s')" target="_blank"><img src="http://latex.codecogs.com/gif.latex?V_{k&plus;1}^{\pi}(s,a)=r(s,\pi(s))&plus;\gamma&space;\sum_{s'\in&space;S}p(s'|\pi(s),s)V_{k}^{\pi}(s')" title="V_{k+1}^{\pi}(s,a)=r(s,\pi(s))+\gamma \sum_{s'\in S}p(s'|\pi(s),s)V_{k}^{\pi}(s')"></a></p>
+</blockquote>
+<p>举一个网格的例子，左上角和右下角是目的地，每走一步reward-1，这里面设置policy是random policy，我们现在要计算每个网格state对应的value</p>
+<p><img src="../pics/cs234-lec4/gridworld" alt=""> </p>
+<div align="center"><br><img src="../pics/cs234-l4/gridworld" style="zoom:40%"><br></div>
+
+<p>K=0，初始化所有的state的取值v(s)为0</p>
+<p>K=1，根据贝尔曼方程，上一次迭代的v（s‘）都是0，这一次算出来的v(s)都是-1</p>
+<p>K=2，-1.7 = -1 + E(0,-1,-1)，理论上s’是属于整个集合s的，但是在这个例子里面-1.7的下一个状态s’实际上是只有三种可能的，所以在-1.7对应 的状态转移矩阵中，这三个状态s’的转移概率都是1/3，然后其它s’的转移概率都是0。<br>-1.7右边，-1.7下面的两个-2.0，右-2.0 = -1 + E(-1, -1, -1)，下-2.0 = -1 + E(-1, -1, -1, -1)，虽然算出来都是-2.0，都是他们对应的状态转移矩阵是不一样，右边的-2.0可以转移到3个状态，下面的-2.0可以转移到4个状态。</p>
+<p>k=无穷处，已经迭代到收敛，收敛之后这些value值都不变了，比如-18 = -1 + E(-14, -14, -20, -20) = -18。</p>
+<h3 id="Policy-Iteration"><a href="#Policy-Iteration" class="headerlink" title="Policy Iteration"></a>Policy Iteration</h3><p>策略迭代解决的是control的问题，是在前面策略评估的基础上更新策略。策略迭代分为策略评估和策略提升两部分。</p>
+<p>策略评估，基于当前的Policy计算出每个state的value function：</p>
+<blockquote>
+<p><a href="http://www.codecogs.com/eqnedit.php?latex=V_{k&plus;1}^{\pi}(s,a)=r(s,\pi(s))&plus;\gamma&space;\sum_{s'\in&space;S}p(s'|\pi(s),s)V_{k}^{\pi}(s')" target="_blank"><img src="http://latex.codecogs.com/gif.latex?V_{k&plus;1}^{\pi}(s,a)=r(s,\pi(s))&plus;\gamma&space;\sum_{s'\in&space;S}p(s'|\pi(s),s)V_{k}^{\pi}(s')" title="V_{k+1}^{\pi}(s,a)=r(s,\pi(s))+\gamma \sum_{s'\in S}p(s'|\pi(s),s)V_{k}^{\pi}(s')"></a></p>
+</blockquote>
+<p>策略提升，基于刚刚算出来的v，对每个action再算一个Q ，选择使得Q最大的action，作为当前最优的Policy，也是下一步计算V的policy。</p>
+<blockquote>
+<p><a href="http://www.codecogs.com/eqnedit.php?latex=Q^{\pi_{i}}(s,a)=r(s,a)&plus;\gamma&space;\sum_{s'\in&space;S}p(s'|s,a)V^{\pi_{i}}(s')" target="_blank"><img src="http://latex.codecogs.com/gif.latex?Q^{\pi_{i}}(s,a)=r(s,a)&plus;\gamma&space;\sum_{s'\in&space;S}p(s'|s,a)V^{\pi_{i}}(s')" title="Q^{\pi_{i}}(s,a)=r(s,a)+\gamma \sum_{s'\in S}p(s'|s,a)V^{\pi_{i}}(s')"></a></p>
+<p><a href="http://www.codecogs.com/eqnedit.php?latex=\pi_{i&plus;1}(s)&space;=&space;arg\underset{a}{max}&space;\&space;Q_{\pi_{i}}(s,a)" target="_blank"><img src="http://latex.codecogs.com/gif.latex?\pi_{i&plus;1}(s)&space;=&space;arg\underset{a}{max}&space;\&space;Q_{\pi_{i}}(s,a)" title="\pi_{i+1}(s) = arg\underset{a}{max} \ Q_{\pi_{i}}(s,a)"></a></p>
+</blockquote>
+<p>一开始给定一个policy，V也初始化为0，然后更新policy，用这个更新后的policy去重新评估v，再不断更新，最后会收敛要最优的V和policy。</p>
+<p>还是举网格这个例子，我们刚刚是给定policy求解v值，现在要求最优的policy。需要注意的是，图中这个例子，在评估策略的时候依然使用固定的policy，这不是真正的策略迭代方法，真正的策略迭代在策略评估这一步需要用当前的policy。</p>
+<p><img src="../pics/cs234-lec4/gridworld2" alt=""> </p>
+<p>这里左边计算v值的时候，使用的policy应该改成当前的policy，而不是random policy<br>右边根据v值计算每个action对应的Q值，然后更新policy</p>
+<p>现在考虑红圈圈住的那个state，第0次迭代的时候是random policy，第1次迭代的时候，根据左边的v去计算4个action所对应的Q值，这4个Q值是一样的，所以policy有4个箭头，第2次迭代的时候，算出来左边和上面的Q值是最大的并且是一样大的，所以policy有两个箭头。</p>
+<p><img src="../pics/cs234-lec4/gridworld3" alt=""> </p>
+<p>一直迭代直到policy收敛，最终会得到最优的policy。在这个例子中，在k=3的时候poliy就已经收敛了，但是v还没有收敛，迭代到最后v和policy会一起收敛。如果更新策略评估中的policy，那么v和policy应该是连接收敛的。</p>
+<h3 id="Value-Iteration"><a href="#Value-Iteration" class="headerlink" title="Value Iteration"></a>Value Iteration</h3><p>策略迭代解决的是control的问题，其实值迭代解决的也是control的问题，虽然在迭代的过程中没有显式计算出policy，但是在得到最优的value值之后也就能得到最优的policy，这里选择使得v最大的action作为Policy。这里用的是贝尔曼最优方程，是不对应任何policy的。前面策略迭代用的是贝尔曼期望方程，对对应于某个policy的。</p>
+<blockquote>
+<p><a href="http://www.codecogs.com/eqnedit.php?latex=V_{k&plus;1}(s)=m\underset{a}ax&space;[r(s,a)&plus;\gamma&space;\sum_{s'\in&space;S}p(s'|a,s)V_{k}(s')]" target="_blank"><img src="http://latex.codecogs.com/gif.latex?V_{k&plus;1}(s)=m\underset{a}ax&space;[r(s,a)&plus;\gamma&space;\sum_{s'\in&space;S}p(s'|a,s)V_{k}(s')]" title="V_{k+1}(s)=m\underset{a}ax [r(s,a)+\gamma \sum_{s'\in S}p(s'|a,s)V_{k}(s')]"></a></p>
+</blockquote>
+<p>值迭代的最优化原理是当且仅当任何从s能达到的s′能在当前policy下获取最优的value，那么s也能在当前policy下获得最优value<br>从这个原理出发，如果已知vs′的最优值，那么就能通过贝尔曼方程将v(s)的最优值推出来。因此从终点开始向起点推就能把全部状态最优值推出来。</p>
+<blockquote>
+<p><a href="http://www.codecogs.com/eqnedit.php?latex=V_{\pi}(s)=V_{*}(s)&space;\if\and&space;\&space;only&space;\&space;if&space;\&space;V_{\pi}(s')=V_{*}(s')" target="_blank"><img src="http://latex.codecogs.com/gif.latex?V_{\pi}(s)=V_{*}(s)&space;\if\and&space;\&space;only&space;\&space;if&space;\&space;V_{\pi}(s')=V_{*}(s')" title="V_{\pi}(s)=V_{*}(s) \if\and \ only \ if \ V_{\pi}(s')=V_{*}(s')"></a></p>
+</blockquote>
+<p>现在对比一下这两种方法，走迷宫，我们要从起点走到终点，每走一步reward是-1。<br><img src="../pics/cs234-lec4/gridworld" alt=""> </p>
+<div align="center"><br><img src="../pics/cs234-l4/gridworld" style="zoom:40%"><br></div>
+
+
+<p>在值迭代的方法中，每一个格子里面的数字表示这个state对应的value，我们要做的是求出这些value，再根据value去选择action，比如在-15这个位置，有3个action，一个是向上走，一个是向下走，现在求出来上面的Value值是-1+(-14)=-15，下面的value值是-17，那么我们就会选择往上走。这本身也是一种policy。</p>
+<p>在策略迭代的方法中，直接算policy，每个格子里面的箭头是表示当前应该往哪个方向走。</p>
+<h2 id="Basic-RL-with-Lookup-Tables"><a href="#Basic-RL-with-Lookup-Tables" class="headerlink" title="Basic RL with Lookup Tables"></a>Basic RL with Lookup Tables</h2><p>强化学习分为model based跟model free两种，强化学习是不知道环境的，上一节讲的mdp planning也是已经给出了状态转移矩阵和rewrad函数。Model based则是需要自己学习环境的状态转移矩阵跟reward，然后再去做planning。相当于environment + mdp planning。Model Free是指不需要去猜测环境的state和reward，直接跟环境去做交互，直接从环境中获取state和reward，我们这里只讨论model-free的方法。</p>
+<p>前面的mdp planning通过动态规划的方式去解决已知环境的MDP问题，然后又根据是否更新policy将问题又划分成了prediction和control问题。</p>
+<p>那么在未知环境下，也就是model free的情况下，同样需要解决prediction和control问题，这种新的问题只能与跟环境进行交互，得到一些经历去获取信息。</p>
+<p>解决prediction的问题，是通过估算未知MDP的value function，解决control的问题，是最优化未知MDP的value function以及policy，所以上面这种又叫做value-based，下面这种叫policy-based</p>
+<p>这一节讨论的是在未知环境中解决predict的问题，通过蒙特卡洛方法和时序差分学习，去评估policy。</p>
+<h3 id="Monte-Carlo-Policy-Evaluation"><a href="#Monte-Carlo-Policy-Evaluation" class="headerlink" title="Monte-Carlo Policy Evaluation"></a>Monte-Carlo Policy Evaluation</h3><p>蒙特卡洛策略评估，目标是基于某个Policy，从过往的经历中，去学习value函数。这里必须是完整的episodes，一个完整的episode指的是，从某个初始状态开始，一直执行到终止状态，这样一次遍历。</p>
+<blockquote>
+<p><a href="http://www.codecogs.com/eqnedit.php?latex=S_{1},A_{1},R_{2},S_{2},...S_{k}&space;\sim&space;k" target="_blank"><img src="http://latex.codecogs.com/gif.latex?S_{1},A_{1},R_{2},S_{2},...S_{k}&space;\sim&space;k" title="S_{1},A_{1},R_{2},S_{2},...S_{k} \sim k"></a></p>
+</blockquote>
+<p>在讲MDP的时候讲到，每个state的value值是return的期望：</p>
+<blockquote>
+<p><a href="http://www.codecogs.com/eqnedit.php?latex=G_{t}=&space;R_{t&plus;1}&space;&plus;\gamma&space;R_{t&plus;2}&space;&plus;...&plus;&space;\gamma^{T-1}R_{T}" target="_blank"><img src="http://latex.codecogs.com/gif.latex?G_{t}=&space;R_{t&plus;1}&space;&plus;\gamma&space;R_{t&plus;2}&space;&plus;...&plus;&space;\gamma^{T-1}R_{T}" title="G_{t}= R_{t+1} +\gamma R_{t+2} +...+ \gamma^{T-1}R_{T}"></a></p>
+<p><a href="http://www.codecogs.com/eqnedit.php?latex=V_{\pi}(s)=E_{\pi}\left&space;[&space;R_{t&plus;1}&space;&plus;\gamma&space;R_{t&plus;2}&space;&plus;&space;\gamma^{2}R_{t&plus;3}&space;&plus;&space;...&space;|&space;S_{t}=s&space;\right&space;]" target="_blank"><img src="http://latex.codecogs.com/gif.latex?V_{\pi}(s)=E_{\pi}\left&space;[&space;R_{t&plus;1}&space;&plus;\gamma&space;R_{t&plus;2}&space;&plus;&space;\gamma^{2}R_{t&plus;3}&space;&plus;&space;...&space;|&space;S_{t}=s&space;\right&space;]" title="V_{\pi}(s)=E_{\pi}\left [ R_{t+1} +\gamma R_{t+2} + \gamma^{2}R_{t+3} + ... | S_{t}=s \right ]"></a></p>
+</blockquote>
+<p>蒙特卡洛策略迭代方法，用多条经历的平均return，去代替return的期望。蒙特卡洛策略迭代又分成两种，First-Vist MC和Every-Vist MC。</p>
+<p><img src="../pics/cs234-lec4/gridworld" alt=""><br>这个图里面，给出了三条经历，每一条经历从state s0开始，执行一个action，会得到一个reward，reward就是蓝色的小点，然后会跳到下一个state，一直执行到终止状态。这里设置无衰减，R1(s)=1-2+0+1-3+5=2，R2(s)=-2+0+1-3+5=1。</p>
+<p>假设我们现在要求状态s的value值，在第一条经历中，经过了两次s状态，在第三条经历中也经过了两次s状态。如果用first visit的方法，每一条经历只采第一个状态s，用这两个s去算return的均值。如果是every visit的方法，每一条经历的所有s状态，都要访问，就是说对这四个s算return的均值。</p>
+<p>这些方法，有个问题就是，必须等到执行完所有episode，才能算value。假设有新来了一条经历，又要重新算。</p>
+<h3 id="Incremental-Monte-Carlo"><a href="#Incremental-Monte-Carlo" class="headerlink" title="Incremental Monte-Carlo"></a>Incremental Monte-Carlo</h3><p>针对这个问题，提出增量式的蒙特卡洛计算方法，当新来一个经历的时候，直接更新v，不用重新算。</p>
+<blockquote>
+<p><a href="http://www.codecogs.com/eqnedit.php?latex=N(S_{t})&space;\leftarrow&space;N(S_{t})&space;&plus;&space;1" target="_blank"><img src="http://latex.codecogs.com/gif.latex?N(S_{t})&space;\leftarrow&space;N(S_{t})&space;&plus;&space;1" title="N(S_{t}) \leftarrow N(S_{t}) + 1"></a></p>
+<p><a href="http://www.codecogs.com/eqnedit.php?latex=V(S_{t})&space;\leftarrow&space;V(S_{t})&space;&plus;&space;\frac{1}{N(S_{t})}&space;(G_{t}&space;-&space;V(S_{t}))" target="_blank"><img src="http://latex.codecogs.com/gif.latex?V(S_{t})&space;\leftarrow&space;V(S_{t})&space;&plus;&space;\frac{1}{N(S_{t})}&space;(G_{t}&space;-&space;V(S_{t}))" title="V(S_{t}) \leftarrow V(S_{t}) + \frac{1}{N(S_{t})} (G_{t} - V(S_{t}))"></a></p>
+</blockquote>
+<p>这个公式我们之前推导过，其实和前面求均值是一样的，只是换了种写法。</p>
+<p>为了计算更平稳，这里用α代替1/N:</p>
+<blockquote>
+<p><a href="http://www.codecogs.com/eqnedit.php?latex=V(S_{t})&space;\leftarrow&space;V(S_{t})&space;&plus;&space;\alpha&space;(G_{t}&space;-&space;V(S_{t}))" target="_blank"><img src="http://latex.codecogs.com/gif.latex?V(S_{t})&space;\leftarrow&space;V(S_{t})&space;&plus;&space;\alpha&space;(G_{t}&space;-&space;V(S_{t}))" title="V(S_{t}) \leftarrow V(S_{t}) + \alpha (G_{t} - V(S_{t}))"></a></p>
+</blockquote>
+<p>我们现在解决了新经历这个问题，现在面临的另一个问题就是必须要走完一条经历的所有流程，得到return，才能计算value</p>
+<h3 id="Temporal-Difference-Learning"><a href="#Temporal-Difference-Learning" class="headerlink" title="Temporal-Difference Learning"></a>Temporal-Difference Learning</h3><p>时序差分学习解决了这个问题。</p>
+<p>蒙特卡洛方法用真实的Gt值去更新value，既然我们现在不想走完整个流程再算value，那就预算return，时序差分学习用估算的return值去更新value。</p>
+<p>TD(0)是指在某个state s下执行某个action后转移到下一个状态s′时，用<a href="http://www.codecogs.com/eqnedit.php?latex=R_{t&plus;1}&plus;\gamma&space;V(S_{t&plus;1})" target="_blank"><img src="http://latex.codecogs.com/gif.latex?R_{t&plus;1}&plus;\gamma&space;V(S_{t&plus;1})" title="R_{t+1}+\gamma V(S_{t+1})"></a>去估算真实s的return, 再更新vs。</p>
+<blockquote>
+<p><a href="http://www.codecogs.com/eqnedit.php?latex=V(S_{t})&space;\leftarrow&space;V(S_{t})&space;&plus;&space;\alpha&space;(R_{t&plus;1}&plus;\gamma&space;V(S_{t&plus;1})&space;-&space;V(S_{t}))" target="_blank"><img src="http://latex.codecogs.com/gif.latex?V(S_{t})&space;\leftarrow&space;V(S_{t})&space;&plus;&space;\alpha&space;(R_{t&plus;1}&plus;\gamma&space;V(S_{t&plus;1})&space;-&space;V(S_{t}))" title="V(S_{t}) \leftarrow V(S_{t}) + \alpha (R_{t+1}+\gamma V(S_{t+1}) - V(S_{t}))"></a></p>
+</blockquote>
+<p>其中<a href="http://www.codecogs.com/eqnedit.php?latex=R_{t&plus;1}&plus;\gamma&space;V(S_{t&plus;1})" target="_blank"><img src="http://latex.codecogs.com/gif.latex?R_{t&plus;1}&plus;\gamma&space;V(S_{t&plus;1})" title="R_{t+1}+\gamma V(S_{t+1})"></a>就叫做TD Target，</p>
+<p><a href="http://www.codecogs.com/eqnedit.php?latex=R_{t&plus;1}&plus;\gamma&space;V(S_{t&plus;1})-V(S_{t})" target="_blank"><img src="http://latex.codecogs.com/gif.latex?R_{t&plus;1}&plus;\gamma&space;V(S_{t&plus;1})-V(S_{t})" title="R_{t+1}+\gamma V(S_{t+1})-V(S_{t})"></a>叫做TD Error</p>
+<p>这是最简单的算法，我们也可以，先执行n个action转移到状态s’，再估算s的return，这个就叫Gt(n)</p>
+<blockquote>
+<p><a href="http://www.codecogs.com/eqnedit.php?latex=G_{t}^{(n)}=R_{t&plus;1}&plus;\gamma&space;R_{t&plus;2}&space;&plus;...&plus;\gamma&space;^{n-1}R_{t&plus;n}&space;&plus;&space;\gamma&space;^{n}V(S_{t&plus;n})" target="_blank"><img src="http://latex.codecogs.com/gif.latex?G_{t}^{(n)}=R_{t&plus;1}&plus;\gamma&space;R_{t&plus;2}&space;&plus;...&plus;\gamma&space;^{n-1}R_{t&plus;n}&space;&plus;&space;\gamma&space;^{n}V(S_{t&plus;n})" title="G_{t}^{(n)}=R_{t+1}+\gamma R_{t+2} +...+\gamma ^{n-1}R_{t+n} + \gamma ^{n}V(S_{t+n})"></a></p>
+</blockquote>
+<p>下面举个例子，来说明一下蒙特卡洛跟时序差分的区别。这个例子的policy是一直往左走。</p>
+<p>![][field]</p>
+<p>现在我们考虑这么一个经历trajectory = (S3,TL,0,S2,TL,0,S2,TL,0,S1,TL,1,S1)</p>
+<p>第一个问题是，first visit MC算出来所有状态的value是多少？我们知道value就是return的均值，现在γ=1，那么所有时刻访问过的state的return都是1，所以对应的value也是1,所有state对应的value就是[1 1 1 0 0 0 0]</p>
+<p>第二个问题是，every vistit MC算出来的v(s2)是多少？也是1因为所有时刻访问的state的return都是1，return的均值也是1，所以s2对应的value是1</p>
+<p>第三个问题，TD对state的评估结果是多少？我们先把这一条经历拆成四个元祖，TD是用Rt+1去更新Vst，只有第4个元祖的reward是1，也就是只有s1估算的return是1，那么s1的value值是α, 其它state的value值是0，所以所有state对应的value就是[α 0 0 0 0 0 0]</p>
+<p>第四个问题，前面是只更新了一次，假设更新很多次，那TD和MC又怎么更新？TD会不断从过去的元祖里面重复采样更新，MC不断从过去的经历中重复采样更新。</p>
+<p>在这个例子，我们只有一条经历，现在对这条经历重复采样，分别求MC跟TD的结果。</p>
+<p>首先，蒙特卡洛的结果不变，因为MC对某个state求value的时候，是对这个state的return求均值，重复采样，相当于对多条相同的经历，求return的均值，均值是不变的，所以在first-visit中所有state对应的value依然是[1 1 1 0 0 0 0]</p>
+<p>在TD中，在这条经历的基础上，假设又采样出这些下面这些元祖，现在求TD的结果。最初在这个经历后，我们算出来s1的value值是a，其它state是0。然后用下面第一个元祖更新，reward是0，所以value都不变，第二个元祖，r=1，更新v(s1)=2a, 3a, 4a，则最后所有state对应的value就是[4α 0 0 0 0 0 0]</p>
+<p>最后一个问题，在TD中，这些元祖采样的顺序，会不会影响到算法的收敛？<br>这个肯定会影响的，因为我们是根据v（st+1）更新v(St)，采样顺序不同，v(st+1)就会不一样。那么，什么样的采样顺序才是一个好的顺序呢？应该先采那些临近后面state的样本。</p>
+<h3 id="Certainty-Equivalence"><a href="#Certainty-Equivalence" class="headerlink" title="Certainty Equivalence"></a>Certainty Equivalence</h3><h2 id="Generalization-in-Model-free-RL"><a href="#Generalization-in-Model-free-RL" class="headerlink" title="Generalization in Model-free RL"></a>Generalization in Model-free RL</h2><h3 id="Linear-Value-Function-Approximation-VFA"><a href="#Linear-Value-Function-Approximation-VFA" class="headerlink" title="Linear Value Function Approximation (VFA)"></a>Linear Value Function Approximation (VFA)</h3><h3 id="Monte-Carlo-with-VFA"><a href="#Monte-Carlo-with-VFA" class="headerlink" title="Monte Carlo with VFA"></a>Monte Carlo with VFA</h3><h3 id="TD-Learning-with-VFA"><a href="#TD-Learning-with-VFA" class="headerlink" title="TD Learning with VFA"></a>TD Learning with VFA</h3><h3 id="Incremental-Control-Algorithms"><a href="#Incremental-Control-Algorithms" class="headerlink" title="Incremental Control Algorithms"></a>Incremental Control Algorithms</h3>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>Donate</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="susht WeChat Pay"/>
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RL/" rel="tag"># RL</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/23/Deep-RL-Tutorial/" rel="next" title="《Deep_RL_Tutorial》阅读笔记">
+                <i class="fa fa-chevron-left"></i> 《Deep_RL_Tutorial》阅读笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+<span class="jiathis_txt">分享到：</span>
+<a class="jiathis_button_fav">收藏夹</a>
+<a class="jiathis_button_copy">复制网址</a>
+<a class="jiathis_button_email">邮件</a>
+<a class="jiathis_button_weixin">微信</a>
+<a class="jiathis_button_qzone">QQ空间</a>
+<a class="jiathis_button_tqq">腾讯微博</a>
+<a class="jiathis_button_douban">豆瓣</a>
+<a class="jiathis_button_share">一键分享</a>
+
+<a href="http://www.jiathis.com/share?uid=2140465" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+var jiathis_config={
+  data_track_clickback:true,
+  summary:"",
+  shortUrl:false,
+  hideMore:false
+}
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <p class="site-author-name" itemprop="name">susht</p>
+            <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="mailto:susht3@foxmail.com" target="_blank" title="E-Mail">
+                  
+                    <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/susht" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>知乎</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-MDP-Planning"><span class="nav-number">1.</span> <span class="nav-text">一. MDP Planning</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Markov-Decision-Process"><span class="nav-number">1.1.</span> <span class="nav-text">Markov Decision Process</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MDP-Planning"><span class="nav-number">1.2.</span> <span class="nav-text">MDP Planning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bellman-Equation"><span class="nav-number">1.3.</span> <span class="nav-text">Bellman Equation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Iterative-Policy-Evaluation"><span class="nav-number">1.4.</span> <span class="nav-text">Iterative Policy Evaluation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Policy-Iteration"><span class="nav-number">1.5.</span> <span class="nav-text">Policy Iteration</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Value-Iteration"><span class="nav-number">1.6.</span> <span class="nav-text">Value Iteration</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Basic-RL-with-Lookup-Tables"><span class="nav-number">2.</span> <span class="nav-text">Basic RL with Lookup Tables</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Monte-Carlo-Policy-Evaluation"><span class="nav-number">2.1.</span> <span class="nav-text">Monte-Carlo Policy Evaluation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Incremental-Monte-Carlo"><span class="nav-number">2.2.</span> <span class="nav-text">Incremental Monte-Carlo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Temporal-Difference-Learning"><span class="nav-number">2.3.</span> <span class="nav-text">Temporal-Difference Learning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Certainty-Equivalence"><span class="nav-number">2.4.</span> <span class="nav-text">Certainty Equivalence</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Generalization-in-Model-free-RL"><span class="nav-number">3.</span> <span class="nav-text">Generalization in Model-free RL</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linear-Value-Function-Approximation-VFA"><span class="nav-number">3.1.</span> <span class="nav-text">Linear Value Function Approximation (VFA)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Monte-Carlo-with-VFA"><span class="nav-number">3.2.</span> <span class="nav-text">Monte Carlo with VFA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TD-Learning-with-VFA"><span class="nav-number">3.3.</span> <span class="nav-text">TD Learning with VFA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Incremental-Control-Algorithms"><span class="nav-number">3.4.</span> <span class="nav-text">Incremental Control Algorithms</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">susht</span>
+
+  
+
+   <span>&nbsp; | &nbsp;</span>
+
+	<div class="powered-by">
+	<i class="fa fa-user-md"></i><span id="busuanzi_container_site_uv">
+	  本站访客数:<span id="busuanzi_value_site_uv"></span>
+	</span>
+	</div>
+
+	<span>&nbsp; | &nbsp;</span>
+
+	<div class="powered-by">
+	<i class="fa fa-user-md"></i><span id="busuanzi_container_site_pv">
+	    总访问量<span id="busuanzi_value_site_pv"></span>次
+	</span>
+	</div>
+
+</div>
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+
+
+
+
+</html>
