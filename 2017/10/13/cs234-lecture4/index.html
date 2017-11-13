@@ -69,13 +69,13 @@
 
 
 
-<meta name="description" content="这段时间笔者在学习CS234强化学习课程，此文为Lecture1-Lecture4的总结博文。 本文结构：  MDP Planning  Bellman Equation，Value Iteration，Policy Iteration  Basic RL with Lookup Tables  Monte-Carlo Learning，Temporal-Difference Learning">
+<meta name="description" content="这段时间笔者在学习CS234强化学习课程，此文为Lecture1-Lecture4的总结博文。 本文结构：  MDP Planning  Basic RL with Lookup Tables  Generalization in Model-free RL   一. MDP Planning在讲MDP Planing前先介绍一下MDP，马尔可夫决策过程。 Markov Decision Proc">
 <meta name="keywords" content="RL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="cs234强化学习课程笔记-lecture4">
 <meta property="og:url" content="http://yoursite.com/2017/10/13/cs234-lecture4/index.html">
 <meta property="og:site_name" content="susht">
-<meta property="og:description" content="这段时间笔者在学习CS234强化学习课程，此文为Lecture1-Lecture4的总结博文。 本文结构：  MDP Planning  Bellman Equation，Value Iteration，Policy Iteration  Basic RL with Lookup Tables  Monte-Carlo Learning，Temporal-Difference Learning">
+<meta property="og:description" content="这段时间笔者在学习CS234强化学习课程，此文为Lecture1-Lecture4的总结博文。 本文结构：  MDP Planning  Basic RL with Lookup Tables  Generalization in Model-free RL   一. MDP Planning在讲MDP Planing前先介绍一下MDP，马尔可夫决策过程。 Markov Decision Proc">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://latex.codecogs.com/gif.latex?<S,A,P,R,\gamma>">
 <meta property="og:image" content="http://latex.codecogs.com/gif.latex?\pi&space;(a|s)&space;=&space;P[A_{t}=a|S_{t}=s]">
@@ -119,10 +119,10 @@
 <meta property="og:image" content="https://latex.codecogs.com/gif.latex?v(S,w)&space;=&space;x(S)^{T}w&space;=&space;\sum_{j=1}^{n}x_{j}(S)w_{j}">
 <meta property="og:image" content="https://latex.codecogs.com/gif.latex?J(w)=E_{\pi&space;}[(v_{\pi}(S)-x(S)^{T}w)^{2}]">
 <meta property="og:image" content="https://latex.codecogs.com/gif.latex?\bigtriangleup&space;w&space;=&space;\alpha&space;(v_{\pi}(S)-v(S,w))x(S)">
-<meta property="og:updated_time" content="2017-11-13T07:51:46.291Z">
+<meta property="og:updated_time" content="2017-11-13T08:16:22.427Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="cs234强化学习课程笔记-lecture4">
-<meta name="twitter:description" content="这段时间笔者在学习CS234强化学习课程，此文为Lecture1-Lecture4的总结博文。 本文结构：  MDP Planning  Bellman Equation，Value Iteration，Policy Iteration  Basic RL with Lookup Tables  Monte-Carlo Learning，Temporal-Difference Learning">
+<meta name="twitter:description" content="这段时间笔者在学习CS234强化学习课程，此文为Lecture1-Lecture4的总结博文。 本文结构：  MDP Planning  Basic RL with Lookup Tables  Generalization in Model-free RL   一. MDP Planning在讲MDP Planing前先介绍一下MDP，马尔可夫决策过程。 Markov Decision Proc">
 <meta name="twitter:image" content="http://latex.codecogs.com/gif.latex?<S,A,P,R,\gamma>">
 
 
@@ -378,17 +378,13 @@
         <p>这段时间笔者在学习CS234强化学习课程，此文为Lecture1-Lecture4的总结博文。</p>
 <p>本文结构：</p>
 <ol>
-<li>MDP Planning</li>
+<li><p>MDP Planning</p>
+</li>
+<li><p>Basic RL with Lookup Tables</p>
+</li>
+<li><p>Generalization in Model-free RL</p>
+</li>
 </ol>
-<p>Bellman Equation，Value Iteration，Policy Iteration</p>
-<ol>
-<li>Basic RL with Lookup Tables</li>
-</ol>
-<p>Monte-Carlo Learning，Temporal-Difference Learning</p>
-<ol>
-<li>Generalization in Model-free RL</li>
-</ol>
-<p>Value Function Approximation(VFA)，MC with VFA, TD with VFA</p>
 <h2 id="一-MDP-Planning"><a href="#一-MDP-Planning" class="headerlink" title="一. MDP Planning"></a>一. MDP Planning</h2><p>在讲MDP Planing前先介绍一下MDP，马尔可夫决策过程。</p>
 <h3 id="Markov-Decision-Process"><a href="#Markov-Decision-Process" class="headerlink" title="Markov Decision Process"></a>Markov Decision Process</h3><p>马尔科夫决策过程，MDP可以表示成五元组:</p>
 <p><a href="http://www.codecogs.com/eqnedit.php?latex=<S,A,P,R,\gamma>" target="_blank"><img src="http://latex.codecogs.com/gif.latex?<S,A,P,R,\gamma>"></a></p>
@@ -458,11 +454,11 @@
 <p>一直迭代直到policy收敛，最终会得到最优的policy。在这个例子中，在k=3的时候poliy就已经收敛了，但是v还没有收敛，迭代到最后v和policy会一起收敛。如果更新策略评估中的policy，那么v和policy应该是连接收敛的。</p>
 <h3 id="Value-Iteration"><a href="#Value-Iteration" class="headerlink" title="Value Iteration"></a>Value Iteration</h3><p>策略迭代解决的是control的问题，其实值迭代解决的也是control的问题，虽然在迭代的过程中没有显式计算出policy，但是在得到最优的value值之后也就能得到最优的policy，这里选择使得v最大的action作为Policy。这里用的是贝尔曼最优方程，是不对应任何policy的。前面策略迭代用的是贝尔曼期望方程，对对应于某个policy的。</p>
 <blockquote>
-<p><a href="http://www.codecogs.com/eqnedit.php?latex=V_{k&plus;1}(s)=m\underset{a}ax&space;[r(s,a)&plus;\gamma&space;\sum_{s'\in&space;S}p(s'|a,s)V_{k}(s')]" target="_blank"><img src="http://latex.codecogs.com/gif.latex?V_{k&plus;1}(s)=m\underset{a}ax&space;[r(s,a)&plus;\gamma&space;\sum_{s'\in&space;S}p(s'|a,s)V_{k}(s')]"></a></p>
+<p><img src="http://latex.codecogs.com/gif.latex?V_{k&plus;1}(s)=m\underset{a}ax&space;[r(s,a)&plus;\gamma&space;\sum_{s'\in&space;S}p(s'|a,s)V_{k}(s')]"></p>
 </blockquote>
 <p>值迭代的最优化原理是当且仅当任何从s能达到的s′能在当前policy下获取最优的value，那么s也能在当前policy下获得最优value<br>从这个原理出发，如果已知vs′的最优值，那么就能通过贝尔曼方程将v(s)的最优值推出来。因此从终点开始向起点推就能把全部状态最优值推出来。</p>
 <blockquote>
-<p><a href="http://www.codecogs.com/eqnedit.php?latex=V_{\pi}(s)=V_{*}(s)&space;\if\and&space;\&space;only&space;\&space;if&space;\&space;V_{\pi}(s')=V_{*}(s')" target="_blank"><img src="http://latex.codecogs.com/gif.latex?V_{\pi}(s)=V_{*}(s)&space;\if\and&space;\&space;only&space;\&space;if&space;\&space;V_{\pi}(s')=V_{*}(s')"></a></p>
+<p><img src="http://latex.codecogs.com/gif.latex?V_{\pi}(s)=V_{*}(s)&space;\if\and&space;\&space;only&space;\&space;if&space;\&space;V_{\pi}(s')=V_{*}(s')"></p>
 </blockquote>
 <p>现在对比一下这两种方法，走迷宫，我们要从起点走到终点，每走一步reward是-1。</p>
 <div align="center"><br><img src="https://github.com/susht3/susht3.github.io/blob/master/pics/cs234-lec4/vs.png?raw=true" style="zoom:40%"><br></div>
@@ -470,7 +466,7 @@
 
 <p>在值迭代的方法中，每一个格子里面的数字表示这个state对应的value，我们要做的是求出这些value，再根据value去选择action，比如在-15这个位置，有3个action，一个是向上走，一个是向下走，现在求出来上面的Value值是-1+(-14)=-15，下面的value值是-17，那么我们就会选择往上走。这本身也是一种policy。</p>
 <p>在策略迭代的方法中，直接算policy，每个格子里面的箭头是表示当前应该往哪个方向走。</p>
-<h2 id="Basic-RL-with-Lookup-Tables"><a href="#Basic-RL-with-Lookup-Tables" class="headerlink" title="Basic RL with Lookup Tables"></a>Basic RL with Lookup Tables</h2><p>强化学习分为model based跟model free两种，强化学习是不知道环境的，上一节讲的mdp planning也是已经给出了状态转移矩阵和rewrad函数。Model based则是需要自己学习环境的状态转移矩阵跟reward，然后再去做planning。相当于environment + mdp planning。Model Free是指不需要去猜测环境的state和reward，直接跟环境去做交互，直接从环境中获取state和reward，我们这里只讨论model-free的方法。</p>
+<h2 id="二-Basic-RL-with-Lookup-Tables"><a href="#二-Basic-RL-with-Lookup-Tables" class="headerlink" title="二. Basic RL with Lookup Tables"></a>二. Basic RL with Lookup Tables</h2><p>强化学习分为model based跟model free两种，强化学习是不知道环境的，上一节讲的mdp planning也是已经给出了状态转移矩阵和rewrad函数。Model based则是需要自己学习环境的状态转移矩阵跟reward，然后再去做planning。相当于environment + mdp planning。Model Free是指不需要去猜测环境的state和reward，直接跟环境去做交互，直接从环境中获取state和reward，我们这里只讨论model-free的方法。</p>
 <p>前面的mdp planning通过动态规划的方式去解决已知环境的MDP问题，然后又根据是否更新policy将问题又划分成了prediction和control问题。</p>
 <p>那么在未知环境下，也就是model free的情况下，同样需要解决prediction和control问题，这种新的问题只能与跟环境进行交互，得到一些经历去获取信息。</p>
 <p>解决prediction的问题，是通过估算未知MDP的value function，解决control的问题，是最优化未知MDP的value function以及policy，所以上面这种又叫做value-based，下面这种叫policy-based</p>
@@ -504,13 +500,13 @@
 <p>蒙特卡洛方法用真实的Gt值去更新value，既然我们现在不想走完整个流程再算value，那就预算return，时序差分学习用估算的return值去更新value。</p>
 <p>TD(0)是指在某个state s下执行某个action后转移到下一个状态s′时，用<a href="http://www.codecogs.com/eqnedit.php?latex=R_{t&plus;1}&plus;\gamma&space;V(S_{t&plus;1})" target="_blank"><img src="http://latex.codecogs.com/gif.latex?R_{t&plus;1}&plus;\gamma&space;V(S_{t&plus;1})"></a>去估算真实s的return, 再更新vs。</p>
 <blockquote>
-<p><a href="http://www.codecogs.com/eqnedit.php?latex=V(S_{t})&space;\leftarrow&space;V(S_{t})&space;&plus;&space;\alpha&space;(R_{t&plus;1}&plus;\gamma&space;V(S_{t&plus;1})&space;-&space;V(S_{t}))" target="_blank"><img src="http://latex.codecogs.com/gif.latex?V(S_{t})&space;\leftarrow&space;V(S_{t})&space;&plus;&space;\alpha&space;(R_{t&plus;1}&plus;\gamma&space;V(S_{t&plus;1})&space;-&space;V(S_{t}))"></a></p>
+<p><img src="http://latex.codecogs.com/gif.latex?V(S_{t})&space;\leftarrow&space;V(S_{t})&space;&plus;&space;\alpha&space;(R_{t&plus;1}&plus;\gamma&space;V(S_{t&plus;1})&space;-&space;V(S_{t}))"></p>
 </blockquote>
-<p>其中<a href="http://www.codecogs.com/eqnedit.php?latex=R_{t&plus;1}&plus;\gamma&space;V(S_{t&plus;1})" target="_blank"><img src="http://latex.codecogs.com/gif.latex?R_{t&plus;1}&plus;\gamma&space;V(S_{t&plus;1})"></a>就叫做TD Target，</p>
-<p><a href="http://www.codecogs.com/eqnedit.php?latex=R_{t&plus;1}&plus;\gamma&space;V(S_{t&plus;1})-V(S_{t})" target="_blank"><img src="http://latex.codecogs.com/gif.latex?R_{t&plus;1}&plus;\gamma&space;V(S_{t&plus;1})-V(S_{t})"></a>叫做TD Error</p>
+<p>其中<img src="http://latex.codecogs.com/gif.latex?R_{t&plus;1}&plus;\gamma&space;V(S_{t&plus;1})">就叫做TD Target，</p>
+<p><img src="http://latex.codecogs.com/gif.latex?R_{t&plus;1}&plus;\gamma&space;V(S_{t&plus;1})-V(S_{t})">叫做TD Error</p>
 <p>这是最简单的算法，我们也可以，先执行n个action转移到状态s’，再估算s的return，这个就叫Gt(n)</p>
 <blockquote>
-<p><a href="http://www.codecogs.com/eqnedit.php?latex=G_{t}^{(n)}=R_{t&plus;1}&plus;\gamma&space;R_{t&plus;2}&space;&plus;...&plus;\gamma&space;^{n-1}R_{t&plus;n}&space;&plus;&space;\gamma&space;^{n}V(S_{t&plus;n})" target="_blank"><img src="http://latex.codecogs.com/gif.latex?G_{t}^{(n)}=R_{t&plus;1}&plus;\gamma&space;R_{t&plus;2}&space;&plus;...&plus;\gamma&space;^{n-1}R_{t&plus;n}&space;&plus;&space;\gamma&space;^{n}V(S_{t&plus;n})"></a></p>
+<p><img src="http://latex.codecogs.com/gif.latex?G_{t}^{(n)}=R_{t&plus;1}&plus;\gamma&space;R_{t&plus;2}&space;&plus;...&plus;\gamma&space;^{n-1}R_{t&plus;n}&space;&plus;&space;\gamma&space;^{n}V(S_{t&plus;n})"></p>
 </blockquote>
 <p>下面举个例子，来说明一下蒙特卡洛跟时序差分的区别。这个例子的policy是一直往左走。</p>
 <div align="center"><br><img src="https://github.com/susht3/susht3.github.io/blob/master/pics/cs234-lec4/field.png?raw=true" style="zoom:40%"><br></div>
@@ -539,15 +535,15 @@
 <p>3)蒙特卡洛，求解v(st)需要回溯到一整条路径。</p>
 <div align="center"><br><img src="https://github.com/susht3/susht3.github.io/blob/master/pics/cs234-lec4/mc-bk.png?raw=true" style="zoom:40%"><br></div>
 
-<h2 id="Generalization-in-Model-free-RL"><a href="#Generalization-in-Model-free-RL" class="headerlink" title="Generalization in Model-free RL"></a>Generalization in Model-free RL</h2><p>在现实生活中，状态一般是很多的，比如说大型画面游戏，每一帧就是一个state，或者是那种不连续的状态，比如状态是0.1, 0.01这种。</p>
+<h2 id="三-Generalization-in-Model-free-RL"><a href="#三-Generalization-in-Model-free-RL" class="headerlink" title="三. Generalization in Model-free RL"></a>三. Generalization in Model-free RL</h2><p>在现实生活中，状态一般是很多的，比如说大型画面游戏，每一帧就是一个state，或者是那种不连续的状态，比如状态是0.1, 0.01这种。</p>
 <div align="center"><br><img src="https://github.com/susht3/susht3.github.io/blob/master/pics/cs234-lec4/large-state.png?raw=true" style="zoom:40%"><br></div>
 
 <p>针对这种大规模的状态，如果算出每种状态下的真实value function，没有足够的内存也没有足够的计算能力，此外考虑到比较接近的状态它们的值函数取值应该是很相似的，这是一种泛化能力。</p>
 <p>所以需要一个算法去近似价值函数，可以用线性特征组合，神经网络等等。这里我们只讨论线性的方法去逼近价值函数。</p>
 <h3 id="Linear-Value-Function-Approximation-VFA"><a href="#Linear-Value-Function-Approximation-VFA" class="headerlink" title="Linear Value Function Approximation (VFA)"></a>Linear Value Function Approximation (VFA)</h3><p>线性特征组合，把state表示成特征向量，对这些特征向量进行线性组合，算出来这个值就是这个state所对应的value。</p>
-<p><a href="https://www.codecogs.com/eqnedit.php?latex=v(S,w)&space;=&space;x(S)^{T}w&space;=&space;\sum_{j=1}^{n}x_{j}(S)w_{j}" target="_blank"><img src="https://latex.codecogs.com/gif.latex?v(S,w)&space;=&space;x(S)^{T}w&space;=&space;\sum_{j=1}^{n}x_{j}(S)w_{j}" title="v(S,w) = x(S)^{T}w = \sum_{j=1}^{n}x_{j}(S)w_{j}"></a></p>
-<p>定义目标函数是真实v值和算出来v值的平方差，在所有policy下的期望：<br><a href="https://www.codecogs.com/eqnedit.php?latex=J(w)=E_{\pi&space;}[(v_{\pi}(S)-x(S)^{T}w)^{2}]" target="_blank"><img src="https://latex.codecogs.com/gif.latex?J(w)=E_{\pi&space;}[(v_{\pi}(S)-x(S)^{T}w)^{2}]" title="J(w)=E_{\pi }[(v_{\pi}(S)-x(S)^{T}w)^{2}]"></a></p>
-<p>用梯度下降法去更新参数：<br><a href="https://www.codecogs.com/eqnedit.php?latex=\bigtriangleup&space;w&space;=&space;\alpha&space;(v_{\pi}(S)-v(S,w))x(S)" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\bigtriangleup&space;w&space;=&space;\alpha&space;(v_{\pi}(S)-v(S,w))x(S)" title="\bigtriangleup w = \alpha (v_{\pi}(S)-v(S,w))x(S)"></a></p>
+<p><img src="https://latex.codecogs.com/gif.latex?v(S,w)&space;=&space;x(S)^{T}w&space;=&space;\sum_{j=1}^{n}x_{j}(S)w_{j}" title="v(S,w) = x(S)^{T}w = \sum_{j=1}^{n}x_{j}(S)w_{j}"></p>
+<p>定义目标函数是真实v值和算出来v值的平方差，在所有policy下的期望：<br><img src="https://latex.codecogs.com/gif.latex?J(w)=E_{\pi&space;}[(v_{\pi}(S)-x(S)^{T}w)^{2}]" title="J(w)=E_{\pi }[(v_{\pi}(S)-x(S)^{T}w)^{2}]"></p>
+<p>用梯度下降法去更新参数：<br><img src="https://latex.codecogs.com/gif.latex?\bigtriangleup&space;w&space;=&space;\alpha&space;(v_{\pi}(S)-v(S,w))x(S)" title="\bigtriangleup w = \alpha (v_{\pi}(S)-v(S,w))x(S)"></p>
 <p>如果把价值函数近似用在蒙特卡洛方法上，目标就是去近似Gt，这里面Gt是对真实V值无偏差的估计，所以这属于有监督学习，监督信息就是Gt。蒙特卡洛方法会收敛到局部最优解</p>
 <p>在时序差分中，目标是近似TD target，这个return是对真实v值有偏差的采样，就是说它实际上并不等于真实v值，只是一个估算值。同样是有监督学习。TD会收敛到全局最优。</p>
 
@@ -785,7 +781,7 @@ var jiathis_config={
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-MDP-Planning"><span class="nav-number">1.</span> <span class="nav-text">一. MDP Planning</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Markov-Decision-Process"><span class="nav-number">1.1.</span> <span class="nav-text">Markov Decision Process</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MDP-Planning"><span class="nav-number">1.2.</span> <span class="nav-text">MDP Planning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bellman-Equation"><span class="nav-number">1.3.</span> <span class="nav-text">Bellman Equation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Iterative-Policy-Evaluation"><span class="nav-number">1.4.</span> <span class="nav-text">Iterative Policy Evaluation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Policy-Iteration"><span class="nav-number">1.5.</span> <span class="nav-text">Policy Iteration</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Value-Iteration"><span class="nav-number">1.6.</span> <span class="nav-text">Value Iteration</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Basic-RL-with-Lookup-Tables"><span class="nav-number">2.</span> <span class="nav-text">Basic RL with Lookup Tables</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Monte-Carlo-Policy-Evaluation"><span class="nav-number">2.1.</span> <span class="nav-text">Monte-Carlo Policy Evaluation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Incremental-Monte-Carlo"><span class="nav-number">2.2.</span> <span class="nav-text">Incremental Monte-Carlo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Temporal-Difference-Learning"><span class="nav-number">2.3.</span> <span class="nav-text">Temporal-Difference Learning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Policy-Evaluation"><span class="nav-number">2.4.</span> <span class="nav-text">Policy Evaluation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Generalization-in-Model-free-RL"><span class="nav-number">3.</span> <span class="nav-text">Generalization in Model-free RL</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linear-Value-Function-Approximation-VFA"><span class="nav-number">3.1.</span> <span class="nav-text">Linear Value Function Approximation (VFA)</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-MDP-Planning"><span class="nav-number">1.</span> <span class="nav-text">一. MDP Planning</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Markov-Decision-Process"><span class="nav-number">1.1.</span> <span class="nav-text">Markov Decision Process</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MDP-Planning"><span class="nav-number">1.2.</span> <span class="nav-text">MDP Planning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bellman-Equation"><span class="nav-number">1.3.</span> <span class="nav-text">Bellman Equation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Iterative-Policy-Evaluation"><span class="nav-number">1.4.</span> <span class="nav-text">Iterative Policy Evaluation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Policy-Iteration"><span class="nav-number">1.5.</span> <span class="nav-text">Policy Iteration</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Value-Iteration"><span class="nav-number">1.6.</span> <span class="nav-text">Value Iteration</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-Basic-RL-with-Lookup-Tables"><span class="nav-number">2.</span> <span class="nav-text">二. Basic RL with Lookup Tables</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Monte-Carlo-Policy-Evaluation"><span class="nav-number">2.1.</span> <span class="nav-text">Monte-Carlo Policy Evaluation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Incremental-Monte-Carlo"><span class="nav-number">2.2.</span> <span class="nav-text">Incremental Monte-Carlo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Temporal-Difference-Learning"><span class="nav-number">2.3.</span> <span class="nav-text">Temporal-Difference Learning</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Policy-Evaluation"><span class="nav-number">2.4.</span> <span class="nav-text">Policy Evaluation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-Generalization-in-Model-free-RL"><span class="nav-number">3.</span> <span class="nav-text">三. Generalization in Model-free RL</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linear-Value-Function-Approximation-VFA"><span class="nav-number">3.1.</span> <span class="nav-text">Linear Value Function Approximation (VFA)</span></a></li></ol></li></ol></div>
             
 
           </div>
