@@ -69,13 +69,13 @@
 
 
 
-<meta name="description" content="这段时间笔者在学习CS234强化学习课程，此文为Lecture1-Lecture4的总结博文。 本文结构：  MDP Planning  Basic RL with Lookup Tables  Generalization in Model-free RL   一. MDP Planning在讲MDP Planing前先介绍一下MDP，马尔可夫决策过程。 Markov Decision Proc">
+<meta name="description" content="这段时间笔者在学习CS234强化学习课程，此文为Lecture1-4的总结博文。 本文结构：  MDP Planning  Basic RL with Lookup Tables  Generalization in Model-free RL   一. MDP Planning在讲MDP Planing前先介绍一下MDP，马尔可夫决策过程。 Markov Decision Process马尔科夫">
 <meta name="keywords" content="RL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="cs234强化学习课程笔记-lecture4">
 <meta property="og:url" content="http://yoursite.com/2017/10/13/cs234-lecture4/index.html">
 <meta property="og:site_name" content="susht">
-<meta property="og:description" content="这段时间笔者在学习CS234强化学习课程，此文为Lecture1-Lecture4的总结博文。 本文结构：  MDP Planning  Basic RL with Lookup Tables  Generalization in Model-free RL   一. MDP Planning在讲MDP Planing前先介绍一下MDP，马尔可夫决策过程。 Markov Decision Proc">
+<meta property="og:description" content="这段时间笔者在学习CS234强化学习课程，此文为Lecture1-4的总结博文。 本文结构：  MDP Planning  Basic RL with Lookup Tables  Generalization in Model-free RL   一. MDP Planning在讲MDP Planing前先介绍一下MDP，马尔可夫决策过程。 Markov Decision Process马尔科夫">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://latex.codecogs.com/gif.latex?<S,A,P,R,\gamma>">
 <meta property="og:image" content="http://latex.codecogs.com/gif.latex?\pi&space;(a|s)&space;=&space;P[A_{t}=a|S_{t}=s]">
@@ -119,10 +119,10 @@
 <meta property="og:image" content="https://latex.codecogs.com/gif.latex?v(S,w)&space;=&space;x(S)^{T}w&space;=&space;\sum_{j=1}^{n}x_{j}(S)w_{j}">
 <meta property="og:image" content="https://latex.codecogs.com/gif.latex?J(w)=E_{\pi&space;}[(v_{\pi}(S)-x(S)^{T}w)^{2}]">
 <meta property="og:image" content="https://latex.codecogs.com/gif.latex?\bigtriangleup&space;w&space;=&space;\alpha&space;(v_{\pi}(S)-v(S,w))x(S)">
-<meta property="og:updated_time" content="2017-11-13T08:16:22.427Z">
+<meta property="og:updated_time" content="2017-11-13T08:21:21.282Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="cs234强化学习课程笔记-lecture4">
-<meta name="twitter:description" content="这段时间笔者在学习CS234强化学习课程，此文为Lecture1-Lecture4的总结博文。 本文结构：  MDP Planning  Basic RL with Lookup Tables  Generalization in Model-free RL   一. MDP Planning在讲MDP Planing前先介绍一下MDP，马尔可夫决策过程。 Markov Decision Proc">
+<meta name="twitter:description" content="这段时间笔者在学习CS234强化学习课程，此文为Lecture1-4的总结博文。 本文结构：  MDP Planning  Basic RL with Lookup Tables  Generalization in Model-free RL   一. MDP Planning在讲MDP Planing前先介绍一下MDP，马尔可夫决策过程。 Markov Decision Process马尔科夫">
 <meta name="twitter:image" content="http://latex.codecogs.com/gif.latex?<S,A,P,R,\gamma>">
 
 
@@ -375,7 +375,7 @@
       
 
       
-        <p>这段时间笔者在学习CS234强化学习课程，此文为Lecture1-Lecture4的总结博文。</p>
+        <p>这段时间笔者在学习CS234强化学习课程，此文为Lecture1-4的总结博文。</p>
 <p>本文结构：</p>
 <ol>
 <li><p>MDP Planning</p>
@@ -541,9 +541,17 @@
 <p>针对这种大规模的状态，如果算出每种状态下的真实value function，没有足够的内存也没有足够的计算能力，此外考虑到比较接近的状态它们的值函数取值应该是很相似的，这是一种泛化能力。</p>
 <p>所以需要一个算法去近似价值函数，可以用线性特征组合，神经网络等等。这里我们只讨论线性的方法去逼近价值函数。</p>
 <h3 id="Linear-Value-Function-Approximation-VFA"><a href="#Linear-Value-Function-Approximation-VFA" class="headerlink" title="Linear Value Function Approximation (VFA)"></a>Linear Value Function Approximation (VFA)</h3><p>线性特征组合，把state表示成特征向量，对这些特征向量进行线性组合，算出来这个值就是这个state所对应的value。</p>
+<blockquote>
 <p><img src="https://latex.codecogs.com/gif.latex?v(S,w)&space;=&space;x(S)^{T}w&space;=&space;\sum_{j=1}^{n}x_{j}(S)w_{j}" title="v(S,w) = x(S)^{T}w = \sum_{j=1}^{n}x_{j}(S)w_{j}"></p>
-<p>定义目标函数是真实v值和算出来v值的平方差，在所有policy下的期望：<br><img src="https://latex.codecogs.com/gif.latex?J(w)=E_{\pi&space;}[(v_{\pi}(S)-x(S)^{T}w)^{2}]" title="J(w)=E_{\pi }[(v_{\pi}(S)-x(S)^{T}w)^{2}]"></p>
-<p>用梯度下降法去更新参数：<br><img src="https://latex.codecogs.com/gif.latex?\bigtriangleup&space;w&space;=&space;\alpha&space;(v_{\pi}(S)-v(S,w))x(S)" title="\bigtriangleup w = \alpha (v_{\pi}(S)-v(S,w))x(S)"></p>
+</blockquote>
+<p>定义目标函数是真实v值和算出来v值的平方差，在所有policy下的期望：</p>
+<blockquote>
+<p><img src="https://latex.codecogs.com/gif.latex?J(w)=E_{\pi&space;}[(v_{\pi}(S)-x(S)^{T}w)^{2}]" title="J(w)=E_{\pi }[(v_{\pi}(S)-x(S)^{T}w)^{2}]"></p>
+</blockquote>
+<p>用梯度下降法去更新参数：</p>
+<blockquote>
+<p><img src="https://latex.codecogs.com/gif.latex?\bigtriangleup&space;w&space;=&space;\alpha&space;(v_{\pi}(S)-v(S,w))x(S)" title="\bigtriangleup w = \alpha (v_{\pi}(S)-v(S,w))x(S)"></p>
+</blockquote>
 <p>如果把价值函数近似用在蒙特卡洛方法上，目标就是去近似Gt，这里面Gt是对真实V值无偏差的估计，所以这属于有监督学习，监督信息就是Gt。蒙特卡洛方法会收敛到局部最优解</p>
 <p>在时序差分中，目标是近似TD target，这个return是对真实v值有偏差的采样，就是说它实际上并不等于真实v值，只是一个估算值。同样是有监督学习。TD会收敛到全局最优。</p>
 
